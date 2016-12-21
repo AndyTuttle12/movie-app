@@ -1,0 +1,150 @@
+* {
+	font-family: 'Passion One', cursive;
+}
+
+body{
+	background-color: #444;
+}
+
+.top-container{
+	height: 60px;
+	/* margin-bottom: 60px; */
+}
+
+.container{
+	width: 1206px;
+	margin: auto;
+	overflow: hidden;
+}
+
+.row{
+	width: 1208px;
+	margin: auto;
+	padding: 0 -2px;
+	overflow: hidden;
+	transition: all 1s;
+}
+
+#app-title{
+	font-family: 'Leckerli One', cursive;
+	margin: 10px auto;
+}
+
+#header{
+	position: fixed;
+	width: 1192px;
+	z-index: 5;
+	height: 60px;
+	margin: 0 0 60px 0;
+	color: #fff;
+	background-color: #000;
+	-webkit-box-shadow: -2px 29px 30px -2px rgba(0,0,0,0.75);
+	-moz-box-shadow: -2px 29px 30px -2px rgba(0,0,0,0.75);
+	box-shadow: -2px 29px 30px -2px rgba(0,0,0,0.75);
+}
+
+.main-menu{
+	overflow-y: scroll;
+	background-color: #333;
+	color: #fff;
+	position: fixed;
+	z-index: 2;
+	height: 100vh;
+	width: 250px;
+	margin: 0 2px 0 -250px;
+	padding: 20px 20px 0;
+	opacity: 0;
+	transition: all 1s;
+}
+
+.active{
+	display: block;
+	transform: translateX(250px);
+	opacity: 1;
+}
+
+.main-menu-tab{
+	position: fixed;
+	background-color: #333;
+	z-index: 3;
+	border: 1px solid #555;
+	border-radius: 0 5px 5px 0;
+	font-family: arial;
+	font-size: 30px;
+	font-weight: 100;
+	color: #888;
+	width: 30px;
+	height: 60px;
+	word-spacing: 0;
+	letter-spacing: .1px;
+	line-height: 0px;
+	padding: 30px 0;
+	margin: 40vh 0px 40vh 0px;
+	transition: all 1s;
+}
+
+.main-menu::-webkit-scrollbar {
+    width: 8px;
+    border-radius: 4px;
+}
+ 
+.main-menu::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+ 
+.main-menu::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  width: 4px;
+  outline: 1px solid slategrey;
+  border-radius: 4px;
+}
+
+
+
+.movie-grid{
+	margin: 60px;
+	height: 100vh;
+	width: 100%;
+}
+
+.movie-item{
+	padding: 0;
+	width: 300px;
+	height: 450px;
+	margin: 2px 2px 2px 0px;
+	background-size: cover;
+	overflow: hidden;
+	position: relative;
+	z-index: 1;
+}
+
+.overlay{  
+	position: absolute;
+	margin-top: -450px;
+	background:rgba(255,255,255,.75);
+   	text-align:center;
+   	height: 100vh;
+   	width: 300px;
+   	opacity:0;
+   -webkit-transition: opacity .25s ease;
+   z-index: 2;
+}
+
+.movie-item:hover .overlay{
+	opacity: .75;
+}
+
+.movie-item:hover .overlay .movie-title{
+	opacity: 1;
+}
+
+.movie-title{
+	color: #000;
+	margin-top: 90px;
+	font-weight: 500;
+}
+
+.movie-item:hover .overlay .movie-rating{
+	opacity: 1;
+	margin: 200px auto 20px 80px;
+}
