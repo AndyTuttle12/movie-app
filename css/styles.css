@@ -153,3 +153,25 @@ body{
 	opacity: 1;
 	margin: 200px auto 20px 80px;
 }
+
+.movie-modal .modal-dialog{
+	width: 1194px;
+	height: 100%;
+	margin: 60px auto 0px 14.9%;
+	background-color: transparent;
+	border-radius: 0px;
+	color: #fff;
+}
+
+.modal-content, .modal-body{
+	height: 100vh;
+	border-radius: 0px;
+	background-color: rgba(0, 0, 0,.4);
+	color: #fff;
+}
+.modal-body span, .modal-body button{
+	color: #fff;
+	font-size: 26px;
+
+}
+

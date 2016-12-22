@@ -17,7 +17,7 @@ $(document).ready(function(){
 	function getNowPlaying(){
 		$.getJSON(nowPlayingUrl, function(nowPlayingData){
 			// console.log(nowPlayingData);
-			console.log(nowPlayingUrl);
+			// console.log(nowPlayingUrl);
 			var nowPlayingHTML = '';
 			for(let i = 0; i < nowPlayingData.results.length; i++){
 				var title = nowPlayingData.results[i].original_title;
@@ -45,13 +45,13 @@ $(document).ready(function(){
 
 	$('.upcoming').click(function(){
 		getUpcoming();
-		console.log('ok');
+		// console.log('ok');
 	});
 
 	function getUpcoming(){
 		$.getJSON(upcomingBaseUrl, function(upcomingData){
 			// console.log(nowPlayingData);
-			console.log(upcomingUrl);
+			// console.log(upcomingUrl);
 			var upcomingHTML = '';
 			for(let i = 0; i < upcomingData.results.length; i++){
 				var title = upcomingData.results[i].original_title;
@@ -79,18 +79,18 @@ $(document).ready(function(){
 
 	var discoverUrl = discoverBaseUrl;
 
-	$('.filter').click(function(val){
-		// console.log('test');
-		discoverJSON(val);
-		console.log('ok');
+	$('.filter').click(function(){
+		var lval = this.lval;
+		console.log(this);
+		discoverJSON(lval);
 	});
 
-	function discoverJSON (val){
+	function discoverJSON(lval){
 		$.getJSON(discoverUrl, function(discoverData){
 			// console.log(discoverData);
 
 			var discoverUrl = '';
-			discoverUrl = discoverBaseUrl + val;
+			discoverUrl = discoverBaseUrl + lval;
 			console.log(discoverUrl);
 			var discoverHTML = '';
 			for(let i = 0; i < discoverData.results.length; i++){
@@ -123,6 +123,7 @@ $(document).ready(function(){
 
 	$('.movie-item').click(function(){
 		$(this).attr();
+		console.log()
 	});
 
 	// $('.movie-item::hover')
