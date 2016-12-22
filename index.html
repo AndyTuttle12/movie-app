@@ -24,28 +24,30 @@
 	<div class="row">
 		<div class="main-menu">
 			
-			<h4>Select a Genre</h4>
-			<p><a href="#">Now Playing</a></p>
-			<p><a href="#">Upcomming</a></p>
-			<p><a href="#">Action</a></p>
-			<p><a href="#">Adventure</a></p>
-			<p><a href="#">Animation</a></p>
-			<p><a href="#">Comedy</a></p>
-			<p><a href="#">Crime</a></p>
-			<p><a href="#">Documentary</a></p>
-			<p><a href="#">Drama</a></p>
-			<p><a href="#">Family</a></p>
-			<p><a href="#">Fanasy</a></p>
-			<p><a href="#">History</a></p>
-			<p><a href="#">Horror</a></p>
-			<p><a href="#">Music</a></p>
-			<p><a href="#">Mystery</a></p>
-			<p><a href="#">Romance</a></p>
-			<p><a href="#">Science Fiction</a></p>
-			<p><a href="#">TV Movie</a></p>
-			<p><a href="#">Thriller</a></p>
-			<p><a href="#">War</a></p>
-			<p><a href="#">Western</a></p>
+			<h4>Select a Category</h4>
+			<p><a href="#" class="filter" val="&sort_by=popularity.desc">Popular</a></p>
+			<p><a href="#" class="playing">Now Playing</a></p>
+			<p><a href="#" class="upcoming">Upcoming</a></p>
+			<hr/>
+			<p><a href="#" class="filter" val="&with_genres=28">Action</a></p>
+			<p><a href="#" class="filter" val="&with_genres=12">Adventure</a></p>
+			<p><a href="#" class="filter" val="&with_genres=16">Animation</a></p>
+			<p><a href="#" class="filter" val="&with_genres=35">Comedy</a></p>
+			<p><a href="#" class="filter" val="&with_genres=80">Crime</a></p>
+			<p><a href="#" class="filter" val="&with_genres=99">Documentary</a></p>
+			<p><a href="#" class="filter" val="&with_genres=18">Drama</a></p>
+			<p><a href="#" class="filter" val="&with_genres=10751">Family</a></p>
+			<p><a href="#" class="filter" val="&with_genres=14">Fanasy</a></p>
+			<p><a href="#" class="filter" val="&with_genres=36">History</a></p>
+			<p><a href="#" class="filter" val="&with_genres=27">Horror</a></p>
+			<p><a href="#" class="filter" val="&with_genres=10402">Music</a></p>
+			<p><a href="#" class="filter" val="&with_genres=9648">Mystery</a></p>
+			<p><a href="#" class="filter" val="&with_genres=10749">Romance</a></p>
+			<p><a href="#" class="filter" val="&with_genres=878">Science Fiction</a></p>
+			<p><a href="#" class="filter" val="&with_genres=10770">TV Movie</a></p>
+			<p><a href="#" class="filter" val="&with_genres=53">Thriller</a></p>
+			<p><a href="#" class="filter" val="&with_genres=10752">War</a></p>
+			<p><a href="#" class="filter" val="&with_genres=37">Western</a></p>
 		</div>
 		<div class="main-menu-tab">
 			|||
@@ -55,7 +57,16 @@
 	</div>
 </div>
 
-
-
+<!-- Movie Modal -->
+<div class="modal fade movie-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				Stuff...
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        	</div>
+		</div>
+	</div>
+</div>
 </body>
 </html>
