@@ -179,6 +179,8 @@ function updateModal(thisMovie){
 
 	var posterHTML = '';
 	var titleHTML = '';
+	var infoHTML = '';
+	var ratingHTML = '';
 	// console.log(currentUrl);
 	$.getJSON(currentUrl, function(detailsData){
 		console.log(detailsData);
@@ -192,6 +194,7 @@ function updateModal(thisMovie){
 		var poster = imageBaseUrl + '/w300' + detailsData.poster_path;
 		var description = detailsData.overview;
 		var runTime = detailsData.runtime;
+		var webSite = detailsData.homepage;
 		var genre = '';
 		var genreArray = [];
 		for(let i = 0; i < detailsData.genres.length; i++){
@@ -212,7 +215,15 @@ function updateModal(thisMovie){
 			titleHTML += '<span id="modal-genre">Genres: ' + genre + '</span>';
 		titleHTML += '</p';
 
+		infoHTML += '<p>';
+		infoHTML += '<span id="web-site"><a href="' + webSite + '" target="_blank">Visit the Website Here</a><span id="trailer"> </span>';
+		infoHTML += '</p>';
+
+		ratingHTML += ''
+
 		$('#movie-poster').html(posterHTML);
 		$('.modal-movie-title').html(titleHTML);
+		$('#trailer').html(infoHTML);
+		$('#stars').html(ratingHTML);
 	});
 }

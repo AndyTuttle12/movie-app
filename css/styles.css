@@ -89,6 +89,21 @@ body{
 	cursor: pointer;
 }
 
+.main-menu p:hover{
+	background-color: #337ab7;
+	cursor: pointer;
+	color: #fff;
+	border-radius: 5px;
+}
+
+.main-menu a{
+	color: #fff;
+}
+
+.main-menu a:hover{
+	color: #fff;
+}
+
 .main-menu::-webkit-scrollbar {
     width: 8px;
     border-radius: 4px;
@@ -197,8 +212,9 @@ body{
 }
 
 .modal-movie-title #desc{
-	font-size: 22px;
-	font-weight: normal;
+	font-size: 20px;
+	font-family: helvetica;
+	font-weight: bold;
 }
 
 .modal-movie-title span{
@@ -210,4 +226,8 @@ body{
 	font-size: 16px;
 }
 
+#web-site{
+	font-size: 18px;
+	margin-left: 110px;
+}
 
