@@ -193,11 +193,13 @@ function updateModal(thisMovie){
 		var description = detailsData.overview;
 		var runTime = detailsData.runtime;
 		var genre = '';
+		var genreArray = [];
 		for(let i = 0; i < detailsData.genres.length; i++){
 			genre = detailsData.genres[i].name;
+			genreArray.push(genre);
 		}
 		console.log(detailsData);
-		console.log(genre);
+		console.log(genreArray);
 		// currentID = movieIDArr[this];
 		posterHTML += '<img src="' + poster + '">';
 
