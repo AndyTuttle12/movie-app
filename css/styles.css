@@ -15,6 +15,7 @@ body{
 	width: 1206px;
 	margin: auto;
 	overflow: hidden;
+	padding: 0px;
 }
 
 .row{
@@ -32,7 +33,7 @@ body{
 
 #header{
 	position: fixed;
-	width: 1192px;
+	width: 1206px;
 	z-index: 5;
 	height: 60px;
 	margin: 0 0 60px 0;
@@ -155,9 +156,9 @@ body{
 }
 
 .movie-modal .modal-dialog{
-	width: 1194px;
+	width: 1209px;
 	height: 100%;
-	margin: 60px auto 0px 14.9%;
+	margin: 60px auto 0px 14%;
 	background-color: transparent;
 	border-radius: 0px;
 	color: #fff;
@@ -167,6 +168,7 @@ body{
 	height: 100vh;
 	border-radius: 0px;
 	background-color: rgba(0, 0, 0,.4);
+	background-image: url('');
 	color: #fff;
 }
 .modal-body span, .modal-body button{
@@ -176,8 +178,36 @@ body{
 
 .modal-body #movie-poster{
 	height: 600px;
-	width: 100%;
+	width: ;
+	margin: -30px 20px 20px -10px;
 }
 
+#movie-poster img{
+	height: 100%;
+	margin-left: -10px;
+}
+
+.modal-movie-title{
+	color: #fff;
+	margin: 200px 20px 60px 100px;
+}
+
+.modal-movie-title #title-text{
+	font-size: 40px;
+}
+
+.modal-movie-title #desc{
+	font-size: 22px;
+	font-weight: normal;
+}
+
+.modal-movie-title span{
+	font-size: 18px;
+	color: #eaeaea;
+}
+
+.modal-movie-title #release-date{
+	font-size: 16px;
+}
 
 

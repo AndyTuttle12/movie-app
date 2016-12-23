@@ -1,18 +1,23 @@
-$(document).ready(function(){
-
-	// for all API calls:
+// for all API calls:
 	var apiBaseUrl = 'http://api.themoviedb.org/3';
 	var imageBaseUrl = 'http://image.tmdb.org/t/p';
 
 	const nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey;
 	const discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey;
 	const upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey;
-	const detailsUrl = apiBaseUrl + '/movie/' + movieID + '?api_key=' + apiKey;
+	const detailsUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
 
-	var movieID = 0;
+	var movieIDArr = [];
+	var currentID = 0;
 
 	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+
+$(document).ready(function(){
+
+	
+
+	
 	getNowPlaying();
 
 
@@ -25,6 +30,7 @@ $(document).ready(function(){
 		$.getJSON(nowPlayingUrl, function(nowPlayingData){
 			// console.log(nowPlayingData);
 			// console.log(nowPlayingUrl);
+			movieIDArr = [];
 			var nowPlayingHTML = '';
 			for(let i = 0; i < nowPlayingData.results.length; i++){
 				var title = nowPlayingData.results[i].original_title;
@@ -35,8 +41,11 @@ $(document).ready(function(){
 				var month = months[protoDate.getMonth(release)];
 				var year = (protoDate.getFullYear(release));
 				var poster = imageBaseUrl + '/w300' + nowPlayingData.results[i].poster_path;
+				var nowPlayingID = nowPlayingData.results[i].id;
+				movieIDArr.push(nowPlayingID);
+				// console.log(movieIDArr);
 
-				nowPlayingHTML += '<div class="movie-item col-sm-3" data-toggle="modal" data-target=".movie-modal">';
+				nowPlayingHTML += '<div class="movie-item col-sm-3" id="' + nowPlayingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 					nowPlayingHTML += '<img src="' + poster + '">';
 					nowPlayingHTML += '<div class="overlay">';
 						nowPlayingHTML += '<div class="movie-title">';
@@ -62,6 +71,7 @@ $(document).ready(function(){
 		$.getJSON(upcomingBaseUrl, function(upcomingData){
 			// console.log(nowPlayingData);
 			// console.log(upcomingUrl);
+			movieIDArr = [];
 			var upcomingHTML = '';
 			for(let i = 0; i < upcomingData.results.length; i++){
 				var title = upcomingData.results[i].original_title;
@@ -72,8 +82,11 @@ $(document).ready(function(){
 				var month = months[protoDate.getMonth(release)];
 				var year = (protoDate.getFullYear(release));
 				var poster = imageBaseUrl + '/w300' + upcomingData.results[i].poster_path;
+				var upcomingID = upcomingData.results[i].id;
+				movieIDArr.push(upcomingID);
+				// console.log(movieIDArr);
 				// console.log(poster);
-				upcomingHTML += '<div class="movie-item col-sm-3" data-toggle="modal" data-target=".movie-modal">';
+				upcomingHTML += '<div class="movie-item col-sm-3" id="' + upcomingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 					upcomingHTML += '<img src="' + poster + '">';
 					upcomingHTML += '<div class="overlay">';
 						upcomingHTML += '<div class="movie-title">';
@@ -100,8 +113,8 @@ $(document).ready(function(){
 
 	function discoverJSON(linkVar){
 		$.getJSON(discoverUrl, function(discoverData){
-			console.log(discoverData);
-
+			// console.log(discoverData);
+			movieIDArr = [];
 			var discoverUrl = '';
 			discoverUrl = discoverBaseUrl + linkVar;
 			// console.log(discoverUrl);
@@ -116,11 +129,11 @@ $(document).ready(function(){
 				var month = months[protoDate.getMonth(release)];
 				var year = (protoDate.getFullYear(release));
 				// console.log(release[0]);
-				var year = release.slice(0,4);
 				var poster = imageBaseUrl + '/w300' + discoverData.results[i].poster_path;
 				var discoverID = discoverData.results[i].id;
-				// console.log(poster);
-				discoverHTML += '<div class="movie-item col-sm-3" data-toggle="modal" data-target=".movie-modal">';
+				movieIDArr.push(discoverID);
+				// console.log(movieIDArr);
+				discoverHTML += '<div class="movie-item col-sm-3" id="' + discoverID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 					discoverHTML += '<img src="' + poster + '">';
 					discoverHTML += '<div class="overlay">';
 						discoverHTML += '<div class="movie-title">';
@@ -141,21 +154,63 @@ $(document).ready(function(){
 		animateMenu();
 	});
 
-	$('.movie-item').click(function(){
-		$(this).attr();
-		// updateModal();
-		// console.log(this);
-	});
-
-	function updateModal(){
-		$.getJSON(detailsUrl, function(detailsData){
-			var currentID = movieID + discoverID;
-		});
-	}
+	// $('*').click(function(){
+	// 	// $(this).attr();
+	// 	// updateModal(this.id);
+	// 	console.log(this);
+	// });
+	
+	
+	// updateModal();
 
 });
 
 function animateMenu(){
 	$('.main-menu').toggleClass('active');
 	$('.main-menu-tab').toggleClass('active');
+}
+
+function updateModal(thisMovie){
+	// console.log(thisMovie);
+	currentID = 0;
+	currentID = $(thisMovie).attr('id');
+	// console.log(currentID);
+	var currentUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
+
+	var posterHTML = '';
+	var titleHTML = '';
+	// console.log(currentUrl);
+	$.getJSON(currentUrl, function(detailsData){
+		console.log(detailsData);
+		var title = detailsData.original_title;
+		var release = detailsData.release_date;
+		var protoDate = new Date(release);
+
+		var day = (protoDate.getDate(release)+1);
+		var month = months[protoDate.getMonth(release)];
+		var year = (protoDate.getFullYear(release));
+		var poster = imageBaseUrl + '/w300' + detailsData.poster_path;
+		var description = detailsData.overview;
+		var runTime = detailsData.runtime;
+		var genre = '';
+		for(let i = 0; i < detailsData.genres.length; i++){
+			genre = detailsData.genres[i].name;
+		}
+		console.log(detailsData);
+		console.log(genre);
+		// currentID = movieIDArr[this];
+		posterHTML += '<img src="' + poster + '">';
+
+		titleHTML += '<h1 id="title-text">' + title + '</h1>';
+		titleHTML += '<hr/>';
+		titleHTML += '<p id="desc">' + description + '</p>';
+		titleHTML += '<p id="desc"><span>Release Date: ' + month + ' ' + day + ', ' + year + '</span></p>';
+		titleHTML += '<p>';
+			titleHTML += '<span id="run-time">Length: ' + runTime + ' minutes &nbsp; &nbsp; </span>';
+			titleHTML += '<span id="modal-genre">Genres: ' + genre + '</span>';
+		titleHTML += '</p';
+
+		$('#movie-poster').html(posterHTML);
+		$('.modal-movie-title').html(titleHTML);
+	});
 }
