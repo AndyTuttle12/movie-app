@@ -172,6 +172,12 @@ body{
 .modal-body span, .modal-body button{
 	color: #fff;
 	font-size: 26px;
-
 }
+
+.modal-body #movie-poster{
+	height: 600px;
+	width: 100%;
+}
+
+
 
