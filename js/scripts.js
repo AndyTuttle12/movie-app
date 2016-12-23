@@ -201,8 +201,12 @@ function updateModal(thisMovie){
 			genre = detailsData.genres[i].name;
 			genreArray.push(genre);
 		}
-		console.log(detailsData);
-		console.log(genreArray);
+		for(let i = 0; i < genreArray.length; i++){
+			var visGenre = genreArray.join(', ');
+		}
+
+		// console.log(detailsData);
+		// console.log(visGenre);
 		// currentID = movieIDArr[this];
 		posterHTML += '<img src="' + poster + '">';
 
@@ -212,7 +216,7 @@ function updateModal(thisMovie){
 		titleHTML += '<p id="desc"><span>Release Date: ' + month + ' ' + day + ', ' + year + '</span></p>';
 		titleHTML += '<p>';
 			titleHTML += '<span id="run-time">Length: ' + runTime + ' minutes &nbsp; &nbsp; </span>';
-			titleHTML += '<span id="modal-genre">Genres: ' + genre + '</span>';
+			titleHTML += '<span id="modal-genre">Genres: ' + visGenre + '</span>';
 		titleHTML += '</p';
 
 		infoHTML += '<p>';
