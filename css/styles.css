@@ -227,7 +227,17 @@ body{
 }
 
 #web-site{
-	font-size: 18px;
+	font-size: 16px;
 	margin-left: 110px;
+}
+
+#trailer{
+	float: left;
+}
+
+#movie-rating{
+	float: right;
+	margin-right: 320px;
+	font-size: 18px;
 }
 

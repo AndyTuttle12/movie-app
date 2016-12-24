@@ -195,6 +195,8 @@ function updateModal(thisMovie){
 		var description = detailsData.overview;
 		var runTime = detailsData.runtime;
 		var webSite = detailsData.homepage;
+		var ratingAvg = detailsData.vote_average;
+		var ratingCount = detailsData.vote_count;
 		var genre = '';
 		var genreArray = [];
 		for(let i = 0; i < detailsData.genres.length; i++){
@@ -223,11 +225,11 @@ function updateModal(thisMovie){
 		infoHTML += '<span id="web-site"><a href="' + webSite + '" target="_blank">Visit the Website Here</a><span id="trailer"> </span>';
 		infoHTML += '</p>';
 
-		ratingHTML += ''
+		ratingHTML += '<p><span id="stars">Rating: ' + (ratingAvg/2) + '/5 stars &nbsp; &nbsp; (' + ratingCount + ' reviews)</span></p>';
 
 		$('#movie-poster').html(posterHTML);
 		$('.modal-movie-title').html(titleHTML);
 		$('#trailer').html(infoHTML);
-		$('#stars').html(ratingHTML);
+		$('#movie-rating').html(ratingHTML);
 	});
 }
