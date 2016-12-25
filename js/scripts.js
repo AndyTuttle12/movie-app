@@ -183,7 +183,7 @@ function updateModal(thisMovie){
 	var ratingHTML = '';
 	// console.log(currentUrl);
 	$.getJSON(currentUrl, function(detailsData){
-		console.log(detailsData);
+		// console.log(detailsData);
 		var title = detailsData.original_title;
 		var release = detailsData.release_date;
 		var protoDate = new Date(release);
@@ -206,7 +206,7 @@ function updateModal(thisMovie){
 		for(let i = 0; i < genreArray.length; i++){
 			var visGenre = genreArray.join(', ');
 		}
-
+		
 		// console.log(detailsData);
 		// console.log(visGenre);
 		// currentID = movieIDArr[this];
@@ -225,8 +225,26 @@ function updateModal(thisMovie){
 		infoHTML += '<span id="web-site"><a href="' + webSite + '" target="_blank">Visit the Website Here</a><span id="trailer"> </span>';
 		infoHTML += '</p>';
 
-		ratingHTML += '<p><span id="stars">Rating: ' + (ratingAvg/2) + '/5 stars &nbsp; &nbsp; (' + ratingCount + ' reviews) &nbsp; &nbsp; Favorite: <i id="heart" class="fa fa-heart-o" aria-hidden="true"></i></span></p>';
+		ratingHTML += '<p><span id="stars">Rating: ' + (ratingAvg/2) + '/5 stars &nbsp; | &nbsp; (' + ratingCount + ' reviews) &nbsp; | &nbsp; Favorite: <i id="heart" class="fa fa-heart-o" aria-hidden="true"></i></span></p>';
+		
 
+		var savedFavorite = localStorage.getItem('favorite');
+		console.log(savedFavorite);
+		if(savedFavorite == null){
+			savedFavorite = "";
+		}
+		var savedArray = savedFavorite.split(',');
+		console.log(savedArray);
+		
+		for(let i = 0; i < savedArray.length; i++){
+			if(savedArray[i] == currentID){
+				console.log(currentID);
+				
+				$('#heart').toggleClass('fa fa-heart');
+				$('#heart').removeClass('fa fa-heart-o');
+			}
+		}
+		
 		$('#movie-poster').html(posterHTML);
 		$('.modal-movie-title').html(titleHTML);
 		$('#trailer').html(infoHTML);
@@ -235,7 +253,13 @@ function updateModal(thisMovie){
 		$('#heart').click(function(){
 			$('#heart').toggleClass('fa fa-heart');
 			$('#heart').toggleClass('fa fa-heart-o');
-			console.log('fave');
+			function appendToStorage(name, data){
+			    var old = localStorage.getItem(name);
+			    if(old === null) old = "";
+			    localStorage.setItem(name, old + ',' + data);
+			}
+			appendToStorage('favorite', currentID);
+			
 		});
 	});
 }

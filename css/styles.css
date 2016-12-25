@@ -242,10 +242,18 @@ body{
 }
 
 #heart{
-	color: #fff;
+	font-weight: bold;
 }
 
 #heart:hover{
+	color: red;
+}
+
+.fa-heart-o{
+	color: #fff;
+}
+
+.fa-heart{
 	color: red;
 }
 
