@@ -225,11 +225,17 @@ function updateModal(thisMovie){
 		infoHTML += '<span id="web-site"><a href="' + webSite + '" target="_blank">Visit the Website Here</a><span id="trailer"> </span>';
 		infoHTML += '</p>';
 
-		ratingHTML += '<p><span id="stars">Rating: ' + (ratingAvg/2) + '/5 stars &nbsp; &nbsp; (' + ratingCount + ' reviews)</span></p>';
+		ratingHTML += '<p><span id="stars">Rating: ' + (ratingAvg/2) + '/5 stars &nbsp; &nbsp; (' + ratingCount + ' reviews) &nbsp; &nbsp; Favorite: <i id="heart" class="fa fa-heart-o" aria-hidden="true"></i></span></p>';
 
 		$('#movie-poster').html(posterHTML);
 		$('.modal-movie-title').html(titleHTML);
 		$('#trailer').html(infoHTML);
 		$('#movie-rating').html(ratingHTML);
+
+		$('#heart').click(function(){
+			$('#heart').toggleClass('fa fa-heart');
+			$('#heart').toggleClass('fa fa-heart-o');
+			console.log('fave');
+		});
 	});
 }

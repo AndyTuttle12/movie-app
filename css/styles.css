@@ -237,7 +237,15 @@ body{
 
 #movie-rating{
 	float: right;
-	margin-right: 320px;
+	margin-right: 120px;
 	font-size: 18px;
+}
+
+#heart{
+	color: #fff;
+}
+
+#heart:hover{
+	color: red;
 }
 
