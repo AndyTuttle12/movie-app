@@ -177,6 +177,7 @@ body{
 	background-color: transparent;
 	border-radius: 0px;
 	color: #fff;
+	opacity: 1;
 }
 
 .modal-content, .modal-body{
@@ -200,6 +201,14 @@ body{
 #movie-poster img{
 	height: 100%;
 	margin-left: -10px;
+	border: 4px solid #333;
+}
+
+#main-content img{
+	position: absolute;
+	margin: -20px 0 0 -16px;
+	width: 1208px;
+	opacity: .7;
 }
 
 .modal-movie-title{

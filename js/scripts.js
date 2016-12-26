@@ -181,6 +181,7 @@ function updateModal(thisMovie){
 	var titleHTML = '';
 	var infoHTML = '';
 	var ratingHTML = '';
+	var backdropHTML = '';
 	// console.log(currentUrl);
 	$.getJSON(currentUrl, function(detailsData){
 		// console.log(detailsData);
@@ -192,6 +193,7 @@ function updateModal(thisMovie){
 		var month = months[protoDate.getMonth(release)];
 		var year = (protoDate.getFullYear(release));
 		var poster = imageBaseUrl + '/w300' + detailsData.poster_path;
+		var backdrop = imageBaseUrl + '/w600' + detailsData.backdrop_path;
 		var description = detailsData.overview;
 		var runTime = detailsData.runtime;
 		var webSite = detailsData.homepage;
@@ -210,6 +212,8 @@ function updateModal(thisMovie){
 		// console.log(detailsData);
 		// console.log(visGenre);
 		// currentID = movieIDArr[this];
+		backdropHTML += '<img src="' + backdrop +'">';
+
 		posterHTML += '<img src="' + poster + '">';
 
 		titleHTML += '<h1 id="title-text">' + title + '</h1>';
@@ -244,7 +248,7 @@ function updateModal(thisMovie){
 				$('#heart').removeClass('fa fa-heart-o');
 			}
 		}
-		
+		$('#main-content').html(backdropHTML);
 		$('#movie-poster').html(posterHTML);
 		$('.modal-movie-title').html(titleHTML);
 		$('#trailer').html(infoHTML);
