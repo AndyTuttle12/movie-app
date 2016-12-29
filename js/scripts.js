@@ -262,11 +262,19 @@ function updateModal(thisMovie){
 			$('#heart').toggleClass('fa fa-heart-o');
 			function appendToStorage(name, data){
 			    var old = localStorage.getItem(name);
-			    if(old === null) old = "";
+			    if(old === null){
+			    	old = "";
+			    }
 			    localStorage.setItem(name, old + ',' + data);
 			}
 			appendToStorage('favorite', currentID);
 			
 		});
+	});
+}
+
+function showFavorites(favorite){
+	$.getJSON(favoritesUrl, function(favoritesData){
+		
 	});
 }
