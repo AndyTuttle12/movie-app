@@ -12,6 +12,9 @@
 
 	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+	var nowPlayingHTML = '';
+	var upcomingHTML = '';
+	var discoverHTML = '';
 
 $(document).ready(function(){
 
@@ -31,7 +34,7 @@ $(document).ready(function(){
 			// console.log(nowPlayingData);
 			// console.log(nowPlayingUrl);
 			movieIDArr = [];
-			var nowPlayingHTML = '';
+			nowPlayingHTML = '';
 			for(let i = 0; i < nowPlayingData.results.length; i++){
 				var title = nowPlayingData.results[i].original_title;
 				var release = nowPlayingData.results[i].release_date;
@@ -72,7 +75,7 @@ $(document).ready(function(){
 			// console.log(nowPlayingData);
 			// console.log(upcomingUrl);
 			movieIDArr = [];
-			var upcomingHTML = '';
+			upcomingHTML = '';
 			for(let i = 0; i < upcomingData.results.length; i++){
 				var title = upcomingData.results[i].original_title;
 				var release = upcomingData.results[i].release_date;
@@ -119,7 +122,7 @@ $(document).ready(function(){
 			discoverUrl = discoverBaseUrl + linkVar;
 			// console.log(discoverUrl);
 
-			var discoverHTML = '';
+			discoverHTML = '';
 			for(let i = 0; i < discoverData.results.length; i++){
 				var title = discoverData.results[i].original_title;
 				var release = discoverData.results[i].release_date;
