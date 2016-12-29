@@ -215,11 +215,39 @@ body{
 	border: 4px solid #333;
 }
 
+#main-content{
+	/* transition: all 1s; */
+}
+
 #main-content img{
 	position: absolute;
 	margin: -20px 0 0 -16px;
 	width: 1208px;
-	opacity: .7;
+	opacity: .6;
+    -webkit-animation: fadein 5s;
+    -moz-animation: fadein 5s;
+    -ms-animation: fadein 5s;
+    animation: fadein 5s;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: .6; }
+}
+
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: .6; }
+}
+
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: .6; }
+}
+
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: .6; }
 }
 
 .modal-movie-title{
@@ -274,6 +302,9 @@ body{
 }
 
 .fa-heart{
-	color: red;
+	color: #fff;
 }
 
+.fa-heart:hover{
+	color: red;
+}

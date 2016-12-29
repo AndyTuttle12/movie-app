@@ -216,7 +216,7 @@ function updateModal(thisMovie){
 		// console.log(visGenre);
 		// currentID = movieIDArr[this];
 		backdropHTML += '<img src="' + backdrop +'">';
-
+		
 		posterHTML += '<img src="' + poster + '">';
 
 		titleHTML += '<h1 id="title-text">' + title + '</h1>';
@@ -275,6 +275,6 @@ function updateModal(thisMovie){
 
 function showFavorites(favorite){
 	$.getJSON(favoritesUrl, function(favoritesData){
-		
+
 	});
 }
