@@ -232,8 +232,15 @@ function updateModal(thisMovie){
 		infoHTML += '<span id="web-site"><a href="' + webSite + '" target="_blank">Visit the Website Here</a><span id="trailer"> </span>';
 		infoHTML += '</p>';
 
-		ratingHTML += '<p><span id="stars">Rating: ' + (ratingAvg/2) + '/5 stars &nbsp; | &nbsp; (' + ratingCount + ' reviews) &nbsp; | &nbsp; Favorite: <i id="heart" class="fa fa-heart-o" aria-hidden="true"></i></span></p>';
-		
+		ratingHTML += '<div>';
+			ratingHTML += '<div id="stars">';
+				ratingHTML += 'Rating: &nbsp; <div class="star-ratings">';
+					ratingHTML += '<div class="star-ratings-top" style="width: ' + (ratingAvg * 10) + '%"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>';
+					ratingHTML += '<div class="star-ratings-bottom"><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span></div>';
+				ratingHTML += '</div>';
+				ratingHTML += ' &nbsp; &nbsp; (' + ratingCount + ' reviews) &nbsp; | &nbsp; Favorite: <i id="heart" class="fa fa-heart-o" aria-hidden="true"></i>';
+			ratingHTML += '</div>';
+		ratingHTML += '</div>';
 
 		var savedFavorite = localStorage.getItem('favorite');
 		console.log(savedFavorite);

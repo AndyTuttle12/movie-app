@@ -279,6 +279,10 @@ body{
 	margin-left: 110px;
 }
 
+#web-site a{
+	color: #fff;
+}
+
 #trailer{
 	float: left;
 }
@@ -307,4 +311,44 @@ body{
 
 .fa-heart:hover{
 	color: red;
+}
+
+#stars{
+	width: 530px;
+	font-size: 25px;
+}
+
+.star-ratings{
+	unicode-bidi: bidi-override;
+	font-size: 25px;
+	font-weight: bold;
+	height: 30px;
+	width: 117px;
+	position: relative;
+	padding: 0;
+	margin-bottom: -4px;
+	display: inline-block;
+	/* overflow: hidden; */
+} 
+
+.star-ratings-top{
+    padding: 0;
+    position: absolute;
+    z-index: 2;
+    display: block;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    
+}
+
+.star-ratings-top span{
+	color: gold;
+}
+
+.star-ratings-bottom{
+	position: absolute;
+    padding: 0;
+    display: block;
+    z-index: 0;
 }
