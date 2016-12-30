@@ -148,6 +148,34 @@ body{
 	overflow: hidden;
 	position: relative;
 	z-index: 1;
+	
+}
+
+.movie-item img{
+	-webkit-animation: popin 400ms;
+    -moz-animation: popin 400ms;
+    -ms-animation: popin 400ms;
+    animation: popin 400ms;
+}
+
+@keyframes popin {
+    from {transform: scale(0);}
+    to   {transform: scale(1);}
+}
+
+@-moz-keyframes popin {
+    from { height: 0; width: 0; }
+    to   { height: 450px; width: 300px; }
+}
+
+@-webkit-keyframes popin {
+    from { height: 0; width: 0; }
+    to   { height: 450px; width: 300px; }
+}
+
+@-ms-keyframes popin {
+    from { height: 0; width: 0; }
+    to   { height: 450px; width: 300px; }
 }
 
 .overlay{  
