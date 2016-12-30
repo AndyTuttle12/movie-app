@@ -39,7 +39,6 @@ $(document).ready(function(){
 				var title = nowPlayingData.results[i].original_title;
 				var release = nowPlayingData.results[i].release_date;
 				var protoDate = new Date(release);
-
 				var day = (protoDate.getDate(release)+1);
 				var month = months[protoDate.getMonth(release)];
 				var year = (protoDate.getFullYear(release));
@@ -60,8 +59,13 @@ $(document).ready(function(){
 						nowPlayingHTML += '</div>';
 					nowPlayingHTML += '</div>';
 				nowPlayingHTML += '</div>';
+
+				setTimeout(function(){
+					$('#movie-grid').html(nowPlayingHTML);
+					$('.movie-item').addClass('view');
+				}, 200);
 			}
-			$('#movie-grid').html(nowPlayingHTML);
+			
 		});
 	};
 

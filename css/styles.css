@@ -151,7 +151,7 @@ body{
 	
 }
 
-.movie-item img{
+.movie-item{
 	-webkit-animation: popin 400ms;
     -moz-animation: popin 400ms;
     -ms-animation: popin 400ms;
