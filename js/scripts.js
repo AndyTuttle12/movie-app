@@ -1,16 +1,19 @@
 // for all API calls:
 	var apiBaseUrl = 'http://api.themoviedb.org/3';
 	var imageBaseUrl = 'http://image.tmdb.org/t/p';
+	var tmsBaseUrl = 'http://data.tmsapi.com/v1.1';
 
 	const nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey;
 	const discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey;
 	const upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey;
 	const detailsUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
+	const tmsUrl = tmsBaseUrl + '/movies/showings?startDate="' +  + '"&zip="' +  + '"&api_key=' + tmsApiKey;
 
 	var movieIDArr = [];
 	var currentID = 0;
 
 	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	var numMonths = ['01','02','03','04','05','06','07','08','09','10','11','12'];
 
 	var nowPlayingHTML = '';
 	var upcomingHTML = '';
@@ -62,7 +65,7 @@ $(document).ready(function(){
 
 				setTimeout(function(){
 					$('#movie-grid').html(nowPlayingHTML);
-					$('.movie-item').addClass('view');
+					// $('.movie-item').addClass('view');
 				}, 200);
 			}
 			
@@ -192,13 +195,16 @@ function updateModal(thisMovie){
 	// console.log(currentUrl);
 	$.getJSON(currentUrl, function(detailsData){
 		// console.log(detailsData);
+		
+		var zip = 30075;
 		var title = detailsData.original_title;
 		var release = detailsData.release_date;
 		var protoDate = new Date(release);
-
+		var today = new Date();
+		var apiDate = today.toJSON().slice(0,10);
 		var day = (protoDate.getDate(release)+1);
 		var month = months[protoDate.getMonth(release)];
-		var year = (protoDate.getFullYear(release));
+		var year = protoDate.getFullYear(release);
 		var poster = imageBaseUrl + '/w300' + detailsData.poster_path;
 		var backdrop = imageBaseUrl + '/w600' + detailsData.backdrop_path;
 		var description = detailsData.overview;
@@ -208,6 +214,14 @@ function updateModal(thisMovie){
 		var ratingCount = detailsData.vote_count;
 		var genre = '';
 		var genreArray = [];
+
+		
+
+		const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + zip + '&api_key=' + tmsApiKey;
+
+		
+
+
 		for(let i = 0; i < detailsData.genres.length; i++){
 			genre = detailsData.genres[i].name;
 			genreArray.push(genre);
@@ -289,3 +303,4 @@ function showFavorites(favorite){
 
 	});
 }
+
