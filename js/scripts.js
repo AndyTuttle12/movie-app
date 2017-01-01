@@ -192,6 +192,7 @@ function updateModal(thisMovie){
 	var infoHTML = '';
 	var ratingHTML = '';
 	var backdropHTML = '';
+	var ticketsHTML = '';
 	// console.log(currentUrl);
 	$.getJSON(currentUrl, function(detailsData){
 		// console.log(detailsData);
@@ -215,27 +216,21 @@ function updateModal(thisMovie){
 		var genre = '';
 		var genreArray = [];
 		var currentRootId = '';
-
-		
+		var currentTmsId = '';
 
 		const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + zip + '&api_key=' + tmsApiKey;
-
 
 		$.getJSON(tmsUrl, function(tmsData){
 			console.log(tmsData);
 			for(let i = 0; i < tmsData.length; i++){
 				var tmsTitle = tmsData[i].title;
-				
 				if(tmsTitle == title){
 					currentRootId = tmsData[i].rootId;
-					
+					currentTmsId = tmsData[i].tmsId;
 				}
 			}
-			const tmsVersionsUrl = tmsBaseUrl + '/movies/' + currentRootId + '/versions?api_key=' + tmsApiKey;
-			$.getJSON(tmsVersionsUrl, function(versionsData){
-				console.log(versionsData);
-			});
 		});
+
 
 
 		for(let i = 0; i < detailsData.genres.length; i++){
@@ -275,18 +270,25 @@ function updateModal(thisMovie){
 				ratingHTML += ' &nbsp; &nbsp; (' + ratingCount + ' reviews) &nbsp; | &nbsp; Favorite: <i id="heart" class="fa fa-heart-o" aria-hidden="true"></i>';
 			ratingHTML += '</div>';
 		ratingHTML += '</div>';
+		console.log(protoDate.getTime());
+		console.log(Date.now() - 3888000000);
+		if(protoDate.getTime() > (Date.now() - 3888000000)){
+			ticketsHTML += '<div class="col-sm-4 text-center">';
+				ticketsHTML += '<a href="http://www.fandango.com/moviesintheaters" target="_blank" id="tickets-button" class="btn btn-lg btn-primary"><img width="30px" src="fandango-icon.png"> Get Tickets</a>';
+			ticketsHTML += '</div>';
+		}
 
 		var savedFavorite = localStorage.getItem('favorite');
-		console.log(savedFavorite);
+		// console.log(savedFavorite);
 		if(savedFavorite == null){
 			savedFavorite = "";
 		}
 		var savedArray = savedFavorite.split(',');
-		console.log(savedArray);
+		// console.log(savedArray);
 		
 		for(let i = 0; i < savedArray.length; i++){
 			if(savedArray[i] == currentID){
-				console.log(currentID);
+				// console.log(currentID);
 				
 				$('#heart').toggleClass('fa fa-heart');
 				$('#heart').removeClass('fa fa-heart-o');
@@ -297,6 +299,7 @@ function updateModal(thisMovie){
 		$('.modal-movie-title').html(titleHTML);
 		$('#trailer').html(infoHTML);
 		$('#movie-rating').html(ratingHTML);
+		$('.tickets').html(ticketsHTML);
 
 		$('#heart').click(function(){
 			$('#heart').toggleClass('fa fa-heart');
