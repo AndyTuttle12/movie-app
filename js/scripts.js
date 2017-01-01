@@ -214,12 +214,28 @@ function updateModal(thisMovie){
 		var ratingCount = detailsData.vote_count;
 		var genre = '';
 		var genreArray = [];
+		var currentRootId = '';
 
 		
 
 		const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + zip + '&api_key=' + tmsApiKey;
 
-		
+
+		$.getJSON(tmsUrl, function(tmsData){
+			console.log(tmsData);
+			for(let i = 0; i < tmsData.length; i++){
+				var tmsTitle = tmsData[i].title;
+				
+				if(tmsTitle == title){
+					currentRootId = tmsData[i].rootId;
+					
+				}
+			}
+			const tmsVersionsUrl = tmsBaseUrl + '/movies/' + currentRootId + '/versions?api_key=' + tmsApiKey;
+			$.getJSON(tmsVersionsUrl, function(versionsData){
+				console.log(versionsData);
+			});
+		});
 
 
 		for(let i = 0; i < detailsData.genres.length; i++){
