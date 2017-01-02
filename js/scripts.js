@@ -281,19 +281,22 @@ function updateModal(thisMovie){
 		var savedFavorite = localStorage.getItem('favorite');
 		// console.log(savedFavorite);
 		if(savedFavorite == null){
-			savedFavorite = "";
+			savedFavorite = "";	
 		}
+		console.log(savedFavorite);
 		var savedArray = savedFavorite.split(',');
-		// console.log(savedArray);
-		
-		for(let i = 0; i < savedArray.length; i++){
-			if(savedArray[i] == currentID){
-				// console.log(currentID);
-				
-				$('#heart').toggleClass('fa fa-heart');
-				$('#heart').removeClass('fa fa-heart-o');
+		console.log(savedArray);
+		$('#heart').ready(function(){
+			for(let i = 0; i < savedArray.length; i++){
+				if(savedArray[i] == currentID){
+					console.log(savedArray[i]);
+					$('#heart').removeClass();
+					$('#heart').addClass('fa fa-heart');
+				}
 			}
-		}
+		});
+		
+		$('#heart').removeClass();
 		$('#main-content').html(backdropHTML);
 		$('#movie-poster').html(posterHTML);
 		$('.modal-movie-title').html(titleHTML);
@@ -318,20 +321,19 @@ function updateModal(thisMovie){
 		    	localStorage.removeItem('favorite');
 		    	console.log(favArray);
 		    }else{
-		    	favArray.push(old);
+		    	favArray = old.split(',');
 		    	console.log(favArray);
 		    	
 		    	for(let i = 0; i < favArray.length; i++){
-					console.log(favArray);
+					console.log(favArray[i]);
 					if(favArray[i] == currentID){
 						removeFromStorage('favorite', currentID);
 						console.log('I was removed');
-					}
-				}
-				for(let i = 0; i < favArray.length; i++){
-					if(favArray.indexOf(currentID, 0) == -1){
+						break;
+					}else if(favArray.indexOf(currentID, 0) === -1){
 						console.log('I need to be added');
 						appendToStorage('favorite', currentID);
+						break;
 					}
 				}
 		    }
@@ -342,7 +344,6 @@ function updateModal(thisMovie){
 			    localStorage.setItem(name, old + ',' + data);
 			}
 			function removeFromStorage(name, data){
-			    favArray.push(old.split(','));
 			    console.log(favArray);
 			    for(let i = 0; i < favArray.length; i++){
 			    	if(favArray[i] == currentID){
