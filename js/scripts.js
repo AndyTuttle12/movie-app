@@ -221,7 +221,7 @@ function updateModal(thisMovie){
 		const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + zip + '&api_key=' + tmsApiKey;
 
 		$.getJSON(tmsUrl, function(tmsData){
-			console.log(tmsData);
+			// console.log(tmsData);
 			for(let i = 0; i < tmsData.length; i++){
 				var tmsTitle = tmsData[i].title;
 				if(tmsTitle == title){
@@ -270,8 +270,8 @@ function updateModal(thisMovie){
 				ratingHTML += ' &nbsp; &nbsp; (' + ratingCount + ' reviews) &nbsp; | &nbsp; Favorite: <i id="heart" class="fa fa-heart-o" aria-hidden="true"></i>';
 			ratingHTML += '</div>';
 		ratingHTML += '</div>';
-		console.log(protoDate.getTime());
-		console.log(Date.now() - 3888000000);
+		// console.log(protoDate.getTime());
+		// console.log(Date.now() - 3888000000);
 		if(protoDate.getTime() > (Date.now() - 3888000000)){
 			ticketsHTML += '<div class="col-sm-4 text-center">';
 				ticketsHTML += '<a href="http://www.fandango.com/moviesintheaters" target="_blank" id="tickets-button" class="btn btn-lg btn-primary"><img width="30px" src="fandango-icon.png"> Get Tickets</a>';
@@ -304,14 +304,56 @@ function updateModal(thisMovie){
 		$('#heart').click(function(){
 			$('#heart').toggleClass('fa fa-heart');
 			$('#heart').toggleClass('fa fa-heart-o');
-			function appendToStorage(name, data){
-			    var old = localStorage.getItem(name);
-			    if(old === null){
-			    	old = "";
-			    }
+			var favArray = [];
+			var old = localStorage.getItem('favorite');
+			console.log(old);
+			console.log(currentID);
+			
+		    if(old === null){
+		    	localStorage.setItem('favorite', currentID);
+		    	old = localStorage.getItem('favorite');
+		    	favArray.push(old);
+		    	console.log(favArray);
+		    }else if(old === currentID){
+		    	localStorage.removeItem('favorite');
+		    	console.log(favArray);
+		    }else{
+		    	console.log('please work');
+		    	favArray.push(old);
+		    	console.log(favArray);
+		    	for(let i = 0; i < favArray.length; i++){
+					console.log(favArray);
+					if(favArray[i] == currentID){
+						removeFromStorage('favorite', currentID);
+						console.log('I was removed');
+						break;
+					}
+				}
+				for(let i = 0; i < favArray.length; i++){
+					if(favArray[favArray.length-1] !== currentID){
+						console.log('I need to be added');
+						appendToStorage('favorite', currentID);
+					}
+				}
+		    }
+			
+
+			function appendToStorage(name, data){ 
+				console.log(old);
 			    localStorage.setItem(name, old + ',' + data);
 			}
-			appendToStorage('favorite', currentID);
+			function removeFromStorage(name, data){
+			    favArray.push(old.split(','));
+			    // console.log(favArray);
+			    for(let i = 0; i < favArray.length; i++){
+			    	if(favArray[i] == currentID){
+			    		favArray.splice(i,1);
+			    	}
+			    }
+			    var favString = favArray.join();
+			    localStorage.setItem('favorite', favString);
+			    console.log(favString);
+			}
 			
 		});
 	});
