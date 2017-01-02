@@ -318,19 +318,18 @@ function updateModal(thisMovie){
 		    	localStorage.removeItem('favorite');
 		    	console.log(favArray);
 		    }else{
-		    	console.log('please work');
 		    	favArray.push(old);
 		    	console.log(favArray);
+		    	
 		    	for(let i = 0; i < favArray.length; i++){
 					console.log(favArray);
 					if(favArray[i] == currentID){
 						removeFromStorage('favorite', currentID);
 						console.log('I was removed');
-						break;
 					}
 				}
 				for(let i = 0; i < favArray.length; i++){
-					if(favArray[favArray.length-1] !== currentID){
+					if(favArray.indexOf(currentID, 0) == -1){
 						console.log('I need to be added');
 						appendToStorage('favorite', currentID);
 					}
@@ -344,7 +343,7 @@ function updateModal(thisMovie){
 			}
 			function removeFromStorage(name, data){
 			    favArray.push(old.split(','));
-			    // console.log(favArray);
+			    console.log(favArray);
 			    for(let i = 0; i < favArray.length; i++){
 			    	if(favArray[i] == currentID){
 			    		favArray.splice(i,1);
