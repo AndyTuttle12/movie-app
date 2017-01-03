@@ -219,7 +219,9 @@ function updateModal(thisMovie){
 		var currentTmsId = '';
 
 		const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + zip + '&api_key=' + tmsApiKey;
-
+		
+		$('#main-content').html('');
+		
 		$.getJSON(tmsUrl, function(tmsData){
 			// console.log(tmsData);
 			for(let i = 0; i < tmsData.length; i++){
@@ -244,14 +246,27 @@ function updateModal(thisMovie){
 		// console.log(detailsData);
 		// console.log(visGenre);
 		// currentID = movieIDArr[this];
-		backdropHTML += '<img src="' + backdrop +'">';
+		
 		var backdropCounter = 0;
-		setInterval(function(){
+		var backdropRotate = setInterval(function(){
+			$('#main-content').html('');
 			backdrop = imageBaseUrl + '/w600' + detailsData.images.backdrops[backdropCounter].file_path;
 			$('#main-content').html('<img src="' + backdrop +'">');
 			backdropCounter++;
-			console.log(backdropCounter);
+			if(backdropCounter == detailsData.images.backdrops.length){
+				backdropCounter = 0;
+			}
 		}, 10000);
+
+		$('.close').click(function stopRotate(){
+			clearInterval(backdropRotate);
+			$('#main-content').html('');
+		});
+
+		// function stopRotate(){
+			
+		// }
+
 		
 		posterHTML += '<img src="' + poster + '">';
 
@@ -314,7 +329,7 @@ function updateModal(thisMovie){
 		});
 		
 		$('#heart').removeClass();
-		$('#main-content').html(backdropHTML);
+		// $('#main-content').html(backdropHTML);
 		$('#movie-poster').html(posterHTML);
 		$('.modal-movie-title').html(titleHTML);
 		$('#trailer').html(infoHTML);
