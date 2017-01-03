@@ -244,6 +244,8 @@ body{
 }
 
 #main-content{
+	height: 100vh;
+	position: absolute;
 	/* transition: all 1s; */
 }
 
@@ -344,6 +346,7 @@ body{
 #stars{
 	width: 530px;
 	font-size: 25px;
+	cursor: default;
 }
 
 .star-ratings{
@@ -383,4 +386,17 @@ body{
 
 #tickets-button{
 	margin-left: -30px;
+}
+
+.tooltip.top .tooltip-arrow {
+  	bottom: 0;
+  	left: 50%;
+  	margin-left: 60px;
+  	border-top-color: #333;
+  	border-width: 5px 5px 0;
+}
+.tooltip-inner {
+	background-color: #333;
+  	margin-right: -130px;
+  	border: solid 1px #333;
 }

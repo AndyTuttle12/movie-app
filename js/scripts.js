@@ -263,10 +263,10 @@ function updateModal(thisMovie){
 
 		ratingHTML += '<div>';
 			ratingHTML += '<div id="stars">';
-				ratingHTML += 'Rating: &nbsp; <div class="star-ratings">';
+				ratingHTML += 'Rating: &nbsp; <div class="star-ratings"><a href="#" data-toggle="tooltip" data-placement="top" title="' + (ratingAvg * 10) + '%">';
 					ratingHTML += '<div class="star-ratings-top" style="width: ' + (ratingAvg * 10) + '%"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>';
 					ratingHTML += '<div class="star-ratings-bottom"><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span></div>';
-				ratingHTML += '</div>';
+				ratingHTML += '</a></div>';
 				ratingHTML += ' &nbsp; &nbsp; (' + ratingCount + ' reviews) &nbsp; | &nbsp; Favorite: <i id="heart" class="fa fa-heart-o" aria-hidden="true"></i>';
 			ratingHTML += '</div>';
 		ratingHTML += '</div>';
@@ -303,7 +303,7 @@ function updateModal(thisMovie){
 		$('#trailer').html(infoHTML);
 		$('#movie-rating').html(ratingHTML);
 		$('.tickets').html(ticketsHTML);
-
+		$('[data-toggle="tooltip"]').tooltip();
 		$('#heart').click(function(){
 			$('#heart').toggleClass('fa fa-heart');
 			$('#heart').toggleClass('fa fa-heart-o');
