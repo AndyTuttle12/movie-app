@@ -18,6 +18,7 @@
 	var nowPlayingHTML = '';
 	var upcomingHTML = '';
 	var discoverHTML = '';
+	var favoritesHTML = '';
 
 $(document).ready(function(){
 
@@ -164,14 +165,13 @@ $(document).ready(function(){
 		animateMenu();
 	});
 
-	// $('*').click(function(){
-	// 	// $(this).attr();
-	// 	// updateModal(this.id);
-	// 	console.log(this);
-	// });
-	
-	
-	// updateModal();
+	const favoritesUrl = apiBaseUrl
+
+	function showFavorites(favorite){
+		$.getJSON(favoritesUrl, function(favoritesData){
+			
+		});
+	}
 
 });
 
@@ -185,7 +185,7 @@ function updateModal(thisMovie){
 	currentID = 0;
 	currentID = $(thisMovie).attr('id');
 	// console.log(currentID);
-	var currentUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
+	var currentUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey +'&append_to_response=videos,images';
 
 	var posterHTML = '';
 	var titleHTML = '';
@@ -195,7 +195,7 @@ function updateModal(thisMovie){
 	var ticketsHTML = '';
 	// console.log(currentUrl);
 	$.getJSON(currentUrl, function(detailsData){
-		// console.log(detailsData);
+		console.log(detailsData);
 		
 		var zip = 30075;
 		var title = detailsData.original_title;
@@ -231,7 +231,7 @@ function updateModal(thisMovie){
 			}
 		});
 
-
+		
 
 		for(let i = 0; i < detailsData.genres.length; i++){
 			genre = detailsData.genres[i].name;
@@ -245,6 +245,13 @@ function updateModal(thisMovie){
 		// console.log(visGenre);
 		// currentID = movieIDArr[this];
 		backdropHTML += '<img src="' + backdrop +'">';
+		var backdropCounter = 0;
+		setInterval(function(){
+			backdrop = imageBaseUrl + '/w600' + detailsData.images.backdrops[backdropCounter].file_path;
+			$('#main-content').html('<img src="' + backdrop +'">');
+			backdropCounter++;
+			console.log(backdropCounter);
+		}, 10000);
 		
 		posterHTML += '<img src="' + poster + '">';
 
@@ -277,6 +284,16 @@ function updateModal(thisMovie){
 				ticketsHTML += '<a href="http://www.fandango.com/moviesintheaters" target="_blank" id="tickets-button" class="btn btn-lg btn-primary"><img width="30px" src="fandango-icon.png"> Get Tickets</a>';
 			ticketsHTML += '</div>';
 		}
+
+		function sleep(ms) {
+		  	return new Promise(resolve => setTimeout(resolve, ms));
+		}
+
+		async function wait() {
+		  	await sleep(5000);
+		}
+
+		// wait();
 
 		var savedFavorite = localStorage.getItem('favorite');
 		// console.log(savedFavorite);
@@ -359,9 +376,5 @@ function updateModal(thisMovie){
 	});
 }
 
-function showFavorites(favorite){
-	$.getJSON(favoritesUrl, function(favoritesData){
 
-	});
-}
 

@@ -253,31 +253,35 @@ body{
 	position: absolute;
 	margin: -20px 0 0 -16px;
 	width: 1208px;
-	opacity: .6;
-    -webkit-animation: fadein 5s;
-    -moz-animation: fadein 5s;
-    -ms-animation: fadein 5s;
-    animation: fadein 5s;
+	opacity: 0;
+    -webkit-animation: fadein 10s;
+    -moz-animation: fadein 10s;
+    -ms-animation: fadein 10s;
+    animation: fadein 10s;
 }
 
 @keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: .6; }
+    0% { opacity: 0; }
+    50% { opacity: .6; }
+    100% { opacity: 0; }
 }
 
 @-moz-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: .6; }
+    0% { opacity: 0; }
+    50% { opacity: .6; }
+    100%  { opacity: 0; }
 }
 
 @-webkit-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: .6; }
+    0% { opacity: 0; }
+    50% { opacity: .6; }
+    100%  { opacity: 0; }
 }
 
 @-ms-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: .6; }
+    0% { opacity: 0; }
+    50% { opacity: .6; }
+    100%  { opacity: 0; }
 }
 
 .modal-movie-title{
