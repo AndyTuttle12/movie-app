@@ -2,15 +2,19 @@
 	var apiBaseUrl = 'http://api.themoviedb.org/3';
 	var imageBaseUrl = 'http://image.tmdb.org/t/p';
 	var tmsBaseUrl = 'http://data.tmsapi.com/v1.1';
+	var currentPage = 1;
 
 	const nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey;
-	const discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey;
+	const discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
 	const upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey;
 	const detailsUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
 	const tmsUrl = tmsBaseUrl + '/movies/showings?startDate="' +  + '"&zip="' +  + '"&api_key=' + tmsApiKey;
 
 	var movieIDArr = [];
+	var mpaaArr = [];
+	var currentMpaa = '';
 	var currentID = 0;
+	
 
 	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	var numMonths = ['01','02','03','04','05','06','07','08','09','10','11','12'];
@@ -123,12 +127,15 @@ $(document).ready(function(){
 	});
 
 	function discoverJSON(linkVar){
+		var discoverUrl = '';
+		discoverUrl = discoverBaseUrl + linkVar;
+		console.log(discoverUrl);
+		
 		$.getJSON(discoverUrl, function(discoverData){
-			// console.log(discoverData);
+			console.log(discoverData);
 			movieIDArr = [];
-			var discoverUrl = '';
-			discoverUrl = discoverBaseUrl + linkVar;
-			// console.log(discoverUrl);
+			mpaaArr = [];
+			
 
 			discoverHTML = '';
 			for(let i = 0; i < discoverData.results.length; i++){
@@ -143,7 +150,7 @@ $(document).ready(function(){
 				var poster = imageBaseUrl + '/w300' + discoverData.results[i].poster_path;
 				var discoverID = discoverData.results[i].id;
 				movieIDArr.push(discoverID);
-				// console.log(movieIDArr);
+
 				discoverHTML += '<div class="movie-item col-sm-3" id="' + discoverID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 					discoverHTML += '<img src="' + poster + '">';
 					discoverHTML += '<div class="overlay">';
@@ -158,6 +165,7 @@ $(document).ready(function(){
 				discoverHTML += '</div>';
 			}
 			$('#movie-grid').html(discoverHTML);
+			console.log(movieIDArr);
 		});
 	};
 
@@ -194,6 +202,9 @@ function updateModal(thisMovie){
 	var backdropHTML = '';
 	var ticketsHTML = '';
 	// console.log(currentUrl);
+
+	$.getJSON()
+
 	$.getJSON(currentUrl, function(detailsData){
 		console.log(detailsData);
 		
@@ -217,13 +228,14 @@ function updateModal(thisMovie){
 		var genreArray = [];
 		var currentRootId = '';
 		var currentTmsId = '';
+		var mpaaRating = currentMpaa;
 
 		const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + zip + '&api_key=' + tmsApiKey;
 		
 		$('#main-content').html('');
 		
 		$.getJSON(tmsUrl, function(tmsData){
-			// console.log(tmsData);
+			console.log(tmsData);
 			for(let i = 0; i < tmsData.length; i++){
 				var tmsTitle = tmsData[i].title;
 				if(tmsTitle == title){
@@ -270,7 +282,7 @@ function updateModal(thisMovie){
 		
 		posterHTML += '<img src="' + poster + '">';
 
-		titleHTML += '<h1 id="title-text">' + title + '</h1>';
+		titleHTML += '<h1 id="title-text">' + title + ' <span id="mpaaRating">' + mpaaRating + '</span></h1>';
 		titleHTML += '<hr/>';
 		titleHTML += '<p id="desc">' + description + '</p>';
 		titleHTML += '<p id="desc"><span>Release Date: ' + month + ' ' + day + ', ' + year + '</span></p>';
@@ -315,13 +327,13 @@ function updateModal(thisMovie){
 		if(savedFavorite == null){
 			savedFavorite = "";	
 		}
-		console.log(savedFavorite);
+		// console.log(savedFavorite);
 		var savedArray = savedFavorite.split(',');
-		console.log(savedArray);
+		// console.log(savedArray);
 		$('#heart').ready(function(){
 			for(let i = 0; i < savedArray.length; i++){
 				if(savedArray[i] == currentID){
-					console.log(savedArray[i]);
+					// console.log(savedArray[i]);
 					$('#heart').removeClass();
 					$('#heart').addClass('fa fa-heart');
 				}
