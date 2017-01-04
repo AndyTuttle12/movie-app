@@ -3,17 +3,19 @@
 	var imageBaseUrl = 'http://image.tmdb.org/t/p';
 	var tmsBaseUrl = 'http://data.tmsapi.com/v1.1';
 	var currentPage = 1;
-
+	var movieIDArr = [];
+	var mpaaArr = [];
+	var currentMpaa = 'RATING';
+	var currentID = 0;
+	var today = new Date();
+	var apiDate = today.toJSON().slice(0,10);
+	var zip = 30350;
 	const nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey;
 	const discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
 	const upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey;
 	const detailsUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
-	const tmsUrl = tmsBaseUrl + '/movies/showings?startDate="' +  + '"&zip="' +  + '"&api_key=' + tmsApiKey;
-
-	var movieIDArr = [];
-	var mpaaArr = [];
-	var currentMpaa = '';
-	var currentID = 0;
+	const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + 30075 + '&api_key=' + tmsApiKey;
+	
 	
 
 	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -26,15 +28,13 @@
 
 $(document).ready(function(){
 
-	
-
-	
 	getNowPlaying();
 
 
+	
+
 	$('.playing').click(function(){
 		getNowPlaying();
-		
 	});
 
 	function getNowPlaying(){
@@ -53,6 +53,7 @@ $(document).ready(function(){
 				var poster = imageBaseUrl + '/w300' + nowPlayingData.results[i].poster_path;
 				var nowPlayingID = nowPlayingData.results[i].id;
 				movieIDArr.push(nowPlayingID);
+				// addMpaaRatings();
 				// console.log(movieIDArr);
 
 				nowPlayingHTML += '<div class="movie-item col-sm-3" id="' + nowPlayingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
@@ -77,6 +78,8 @@ $(document).ready(function(){
 		});
 	};
 
+
+
 	$('.upcoming').click(function(){
 		getUpcoming();
 		// console.log('ok');
@@ -98,6 +101,7 @@ $(document).ready(function(){
 				var year = (protoDate.getFullYear(release));
 				var poster = imageBaseUrl + '/w300' + upcomingData.results[i].poster_path;
 				var upcomingID = upcomingData.results[i].id;
+				// addMpaaRatings();
 				movieIDArr.push(upcomingID);
 				// console.log(movieIDArr);
 				// console.log(poster);
@@ -129,10 +133,10 @@ $(document).ready(function(){
 	function discoverJSON(linkVar){
 		var discoverUrl = '';
 		discoverUrl = discoverBaseUrl + linkVar;
-		console.log(discoverUrl);
-		
+		// console.log(discoverUrl);
+
 		$.getJSON(discoverUrl, function(discoverData){
-			console.log(discoverData);
+			// console.log(discoverData);
 			movieIDArr = [];
 			mpaaArr = [];
 			
@@ -149,6 +153,7 @@ $(document).ready(function(){
 				// console.log(release[0]);
 				var poster = imageBaseUrl + '/w300' + discoverData.results[i].poster_path;
 				var discoverID = discoverData.results[i].id;
+				// addMpaaRatings();
 				movieIDArr.push(discoverID);
 
 				discoverHTML += '<div class="movie-item col-sm-3" id="' + discoverID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
@@ -183,6 +188,8 @@ $(document).ready(function(){
 
 });
 
+
+
 function animateMenu(){
 	$('.main-menu').toggleClass('active');
 	$('.main-menu-tab').toggleClass('active');
@@ -203,17 +210,19 @@ function updateModal(thisMovie){
 	var ticketsHTML = '';
 	// console.log(currentUrl);
 
-	$.getJSON()
+	// $.getJSON(discoverUrl, function(){
+
+	// });
 
 	$.getJSON(currentUrl, function(detailsData){
-		console.log(detailsData);
+		// console.log(detailsData);
 		
 		var zip = 30075;
 		var title = detailsData.original_title;
 		var release = detailsData.release_date;
 		var protoDate = new Date(release);
-		var today = new Date();
-		var apiDate = today.toJSON().slice(0,10);
+		
+		
 		var day = (protoDate.getDate(release)+1);
 		var month = months[protoDate.getMonth(release)];
 		var year = protoDate.getFullYear(release);
@@ -229,21 +238,13 @@ function updateModal(thisMovie){
 		var currentRootId = '';
 		var currentTmsId = '';
 		var mpaaRating = currentMpaa;
+		// addMpaaRatings();
 
 		const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + zip + '&api_key=' + tmsApiKey;
 		
 		$('#main-content').html('');
 		
-		$.getJSON(tmsUrl, function(tmsData){
-			console.log(tmsData);
-			for(let i = 0; i < tmsData.length; i++){
-				var tmsTitle = tmsData[i].title;
-				if(tmsTitle == title){
-					currentRootId = tmsData[i].rootId;
-					currentTmsId = tmsData[i].tmsId;
-				}
-			}
-		});
+		
 
 		
 
@@ -282,7 +283,7 @@ function updateModal(thisMovie){
 		
 		posterHTML += '<img src="' + poster + '">';
 
-		titleHTML += '<h1 id="title-text">' + title + ' <span id="mpaaRating">' + mpaaRating + '</span></h1>';
+		titleHTML += '<h1 id="title-text">' + title + '</h1>';
 		titleHTML += '<hr/>';
 		titleHTML += '<p id="desc">' + description + '</p>';
 		titleHTML += '<p id="desc"><span>Release Date: ' + month + ' ' + day + ', ' + year + '</span></p>';
@@ -400,8 +401,30 @@ function updateModal(thisMovie){
 			}
 			
 		});
+
+		// function addMpaaRatings(){	
+		// 	const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + 30075 + '&api_key=' + tmsApiKey;
+		// 	$.getJSON(tmsUrl, function(tmsData){
+		// 		var zip = 30350;
+		// 		console.log(tmsData);
+				
+		// 		for(let i = 0; i < tmsData.length; i++){
+		// 			var tmsTitle = tmsData[i].title;
+					
+		// 			if(tmsTitle == detailsData.original_title){
+		// 				currentRootId = tmsData[i].rootId;
+		// 				currentTmsId = tmsData[i].tmsId;
+		// 				currentMpaa = tmsData[i].ratings[0].code;
+		// 				console.log(currentMpaa);
+		// 			}
+		// 		}
+		// 	});
+		// }
+
 	});
 }
+
+
 
 
 
