@@ -295,7 +295,7 @@ function updateModal(thisMovie){
 		
 		posterHTML += '<img src="' + poster + '">';
 
-		titleHTML += '<h1 id="title-text">' + title + ' <span id="mpaaRating">' + mpaa + '</span></h1>';
+		titleHTML += '<h1 id="title-text">' + title + ' <divƒ id="mpaaRating">' + mpaa + '</div></h1>';
 		titleHTML += '<hr/>';
 		titleHTML += '<p id="desc">' + description + '</p>';
 		titleHTML += '<p id="desc"><span>Release Date: ' + month + ' ' + day + ', ' + year + '</span></p>';
