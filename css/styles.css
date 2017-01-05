@@ -210,13 +210,14 @@ body{
 }
 
 .movie-modal .modal-dialog{
-	width: 1209px;
+	width: 72%;
 	height: 100%;
-	margin: 60px auto 0px 14%;
+	margin: 60px auto 0px;
 	background-color: transparent;
 	border-radius: 0px;
 	color: #fff;
 	opacity: 1;
+	overflow: hidden;
 }
 
 .modal-content, .modal-body{

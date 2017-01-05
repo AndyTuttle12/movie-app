@@ -5,7 +5,7 @@
 	var currentPage = 1;
 	var movieIDArr = [];
 	var mpaaArr = [];
-	var currentMpaa = 'RATING';
+	var currentMpaa = 'NR';
 	var currentID = 0;
 	var today = new Date();
 	var apiDate = today.toJSON().slice(0,10);
@@ -200,7 +200,7 @@ function updateModal(thisMovie){
 	currentID = 0;
 	currentID = $(thisMovie).attr('id');
 	// console.log(currentID);
-	var currentUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey +'&append_to_response=videos,images';
+	var currentUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey +'&append_to_response=videos,images,release_dates';
 
 	var posterHTML = '';
 	var titleHTML = '';
@@ -244,7 +244,19 @@ function updateModal(thisMovie){
 		
 		$('#main-content').html('');
 		
-		
+	 	var releaseResults = detailsData.release_dates.results;
+        var mpaa = 'NR';
+        for (let result of releaseResults) {
+            if (result.iso_3166_1 === "US") {
+                var certifications = result.release_dates;
+                for (let cert of certifications) {
+                    if (cert.certification !== '') {
+                        mpaa = cert.certification;
+                        break;
+                    }
+                }
+            }
+        }
 
 		
 
@@ -283,7 +295,7 @@ function updateModal(thisMovie){
 		
 		posterHTML += '<img src="' + poster + '">';
 
-		titleHTML += '<h1 id="title-text">' + title + '</h1>';
+		titleHTML += '<h1 id="title-text">' + title + ' <span id="mpaaRating">' + mpaa + '</span></h1>';
 		titleHTML += '<hr/>';
 		titleHTML += '<p id="desc">' + description + '</p>';
 		titleHTML += '<p id="desc"><span>Release Date: ' + month + ' ' + day + ', ' + year + '</span></p>';
