@@ -13,10 +13,15 @@ body{
 }
 
 .container{
-	width: 1206px;
+	max-width: 1206px;
+	width: 100%;
 	margin: auto;
 	overflow: hidden;
 	padding: 0px;
+}
+
+#movie-grid{
+	padding: 0;
 }
 
 .row{

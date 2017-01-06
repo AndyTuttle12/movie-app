@@ -56,7 +56,7 @@ $(document).ready(function(){
 				// addMpaaRatings();
 				// console.log(movieIDArr);
 
-				nowPlayingHTML += '<div class="movie-item col-sm-3" id="' + nowPlayingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
+				nowPlayingHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + nowPlayingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 					nowPlayingHTML += '<img src="' + poster + '">';
 					nowPlayingHTML += '<div class="overlay">';
 						nowPlayingHTML += '<div class="movie-title">';
@@ -105,7 +105,7 @@ $(document).ready(function(){
 				movieIDArr.push(upcomingID);
 				// console.log(movieIDArr);
 				// console.log(poster);
-				upcomingHTML += '<div class="movie-item col-sm-3" id="' + upcomingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
+				upcomingHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + upcomingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 					upcomingHTML += '<img src="' + poster + '">';
 					upcomingHTML += '<div class="overlay">';
 						upcomingHTML += '<div class="movie-title">';
@@ -156,7 +156,7 @@ $(document).ready(function(){
 				// addMpaaRatings();
 				movieIDArr.push(discoverID);
 
-				discoverHTML += '<div class="movie-item col-sm-3" id="' + discoverID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
+				discoverHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + discoverID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 					discoverHTML += '<img src="' + poster + '">';
 					discoverHTML += '<div class="overlay">';
 						discoverHTML += '<div class="movie-title">';
