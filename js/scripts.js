@@ -274,7 +274,12 @@ function updateModal(thisMovie){
 		// console.log(visGenre);
 		// currentID = movieIDArr[this];
 		
+		
 		var backdropCounter = 0;
+
+
+		
+		
 		var backdropRotate = setInterval(function(){
 			$('#main-content').html('');
 			backdrop = imageBaseUrl + '/w600' + detailsData.images.backdrops[backdropCounter].file_path;
@@ -284,11 +289,13 @@ function updateModal(thisMovie){
 				backdropCounter = 0;
 			}
 		}, 10000);
-
-		$('.close').click(function stopRotate(){
+		
+		$('.close, .modal-backdrop').click(function stopRotate(){
 			clearInterval(backdropRotate);
 			$('#main-content').html('');
 		});
+
+		
 
 		// function stopRotate(){
 			
