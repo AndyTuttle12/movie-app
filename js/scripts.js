@@ -95,7 +95,7 @@ $(document).ready(function(){
 				var title = upcomingData.results[i].original_title;
 				var release = upcomingData.results[i].release_date;
 				var protoDate = new Date(release);
-
+				var today = new Date();
 				var day = (protoDate.getDate(release)+1);
 				var month = months[protoDate.getMonth(release)];
 				var year = (protoDate.getFullYear(release));
@@ -105,18 +105,20 @@ $(document).ready(function(){
 				movieIDArr.push(upcomingID);
 				// console.log(movieIDArr);
 				// console.log(poster);
-				upcomingHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + upcomingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
-					upcomingHTML += '<img src="' + poster + '">';
-					upcomingHTML += '<div class="overlay">';
-						upcomingHTML += '<div class="movie-title">';
-							upcomingHTML += '<h2>' + title + '</h2>';
-							upcomingHTML += '<h4>Release Date: ' + month + ' ' + day + ', ' + year + '<h4>';
-						upcomingHTML += '</div>';
-						upcomingHTML += '<div class="movie-rating text-center">';
-							upcomingHTML += '';
+				if(protoDate.getTime() > today.getTime()){
+					upcomingHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + upcomingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
+						upcomingHTML += '<img src="' + poster + '">';
+						upcomingHTML += '<div class="overlay">';
+							upcomingHTML += '<div class="movie-title">';
+								upcomingHTML += '<h2>' + title + '</h2>';
+								upcomingHTML += '<h4>Release Date: ' + month + ' ' + day + ', ' + year + '<h4>';
+							upcomingHTML += '</div>';
+							upcomingHTML += '<div class="movie-rating text-center">';
+								upcomingHTML += '';
+							upcomingHTML += '</div>';
 						upcomingHTML += '</div>';
 					upcomingHTML += '</div>';
-				upcomingHTML += '</div>';
+				}
 			}
 			$('#movie-grid').html(upcomingHTML);
 		});
@@ -303,7 +305,7 @@ function updateModal(thisMovie){
 			titleHTML += '<span id="run-time">Length: ' + runTime + ' minutes &nbsp; &nbsp; </span>';
 			titleHTML += '<span id="modal-genre">Genres: ' + visGenre + '</span>';
 		titleHTML += '</p';
-		if(webSite !== ""){
+		if(webSite != ""){
 		infoHTML += '<p>';
 		infoHTML += '<span id="web-site"><a href="' + webSite + '" target="_blank">Visit the Website Here</a><span id="trailer"> </span>';
 		infoHTML += '</p>';
