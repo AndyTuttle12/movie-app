@@ -303,11 +303,11 @@ function updateModal(thisMovie){
 			titleHTML += '<span id="run-time">Length: ' + runTime + ' minutes &nbsp; &nbsp; </span>';
 			titleHTML += '<span id="modal-genre">Genres: ' + visGenre + '</span>';
 		titleHTML += '</p';
-
+		if(webSite !== ""){
 		infoHTML += '<p>';
 		infoHTML += '<span id="web-site"><a href="' + webSite + '" target="_blank">Visit the Website Here</a><span id="trailer"> </span>';
 		infoHTML += '</p>';
-
+		}
 		ratingHTML += '<div>';
 			ratingHTML += '<div id="stars">';
 				ratingHTML += 'Rating: &nbsp; <div class="star-ratings"><a href="#" data-toggle="tooltip" data-placement="top" title="' + (ratingAvg * 10) + '%">';
