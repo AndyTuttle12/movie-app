@@ -10,9 +10,9 @@
 	var today = new Date();
 	var apiDate = today.toJSON().slice(0,10);
 	var zip = 30350;
-	const nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey;
+	const nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US';
 	const discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
-	const upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey;
+	const upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US';
 	const detailsUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
 	const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + 30075 + '&api_key=' + tmsApiKey;
 	
@@ -215,7 +215,7 @@ function updateModal(thisMovie){
 	// });
 
 	$.getJSON(currentUrl, function(detailsData){
-		// console.log(detailsData);
+		console.log(detailsData);
 		
 		var zip = 30075;
 		var title = detailsData.original_title;
