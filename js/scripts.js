@@ -2,6 +2,7 @@
 	var apiBaseUrl = 'http://api.themoviedb.org/3';
 	var imageBaseUrl = 'http://image.tmdb.org/t/p';
 	var tmsBaseUrl = 'http://data.tmsapi.com/v1.1';
+	var currentBaseUrl = '';
 	var currentPage = 1;
 	var movieIDArr = [];
 	var mpaaArr = [];
@@ -41,6 +42,7 @@ $(document).ready(function(){
 		$.getJSON(nowPlayingUrl, function(nowPlayingData){
 			// console.log(nowPlayingData);
 			// console.log(nowPlayingUrl);
+			currentBaseUrl = nowPlayingUrl;
 			movieIDArr = [];
 			nowPlayingHTML = '';
 			for(let i = 0; i < nowPlayingData.results.length; i++){
@@ -89,6 +91,7 @@ $(document).ready(function(){
 		$.getJSON(upcomingBaseUrl, function(upcomingData){
 			// console.log(nowPlayingData);
 			// console.log(upcomingUrl);
+			currentBaseUrl = upcomingBaseUrl;
 			movieIDArr = [];
 			upcomingHTML = '';
 			for(let i = 0; i < upcomingData.results.length; i++){
@@ -128,17 +131,23 @@ $(document).ready(function(){
 
 	$('.filter').click(function(){
 		var linkVar = $(this).attr('lval');
+		var sortVar = $('.sortByActive').attr('sval');
 		// console.log(this);
-		discoverJSON(linkVar);
+		discoverJSON(linkVar,sortVar);
 	});
 
-	function discoverJSON(linkVar){
+	// $('.sortBy').click(function(){
+	// 	currentUrl = 
+	// });
+
+	function discoverJSON(linkVar,sortVar){
 		var discoverUrl = '';
-		discoverUrl = discoverBaseUrl + linkVar;
+		discoverUrl = discoverBaseUrl + linkVar + sortVar;
 		// console.log(discoverUrl);
 
 		$.getJSON(discoverUrl, function(discoverData){
 			// console.log(discoverData);
+			currentBaseUrl = discoverUrl;
 			movieIDArr = [];
 			mpaaArr = [];
 			
@@ -296,12 +305,6 @@ function updateModal(thisMovie){
 		});
 
 		
-
-		// function stopRotate(){
-			
-		// }
-
-		
 		posterHTML += '<img src="' + poster + '">';
 
 		titleHTML += '<h1 id="title-text">' + title + ' <divƒ id="mpaaRating">' + mpaa + '</div></h1>';
@@ -333,16 +336,6 @@ function updateModal(thisMovie){
 				ticketsHTML += '<a href="http://www.fandango.com/moviesintheaters" target="_blank" id="tickets-button" class="btn btn-lg btn-primary"><img width="30px" src="fandango-icon.png"> Get Tickets</a>';
 			ticketsHTML += '</div>';
 		}
-
-		function sleep(ms) {
-		  	return new Promise(resolve => setTimeout(resolve, ms));
-		}
-
-		async function wait() {
-		  	await sleep(5000);
-		}
-
-		// wait();
 
 		var savedFavorite = localStorage.getItem('favorite');
 		// console.log(savedFavorite);
@@ -419,29 +412,8 @@ function updateModal(thisMovie){
 			    var favString = favArray.join();
 			    localStorage.setItem('favorite', favString);
 			    console.log(favString);
-			}
-			
+			}			
 		});
-
-		// function addMpaaRatings(){	
-		// 	const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + 30075 + '&api_key=' + tmsApiKey;
-		// 	$.getJSON(tmsUrl, function(tmsData){
-		// 		var zip = 30350;
-		// 		console.log(tmsData);
-				
-		// 		for(let i = 0; i < tmsData.length; i++){
-		// 			var tmsTitle = tmsData[i].title;
-					
-		// 			if(tmsTitle == detailsData.original_title){
-		// 				currentRootId = tmsData[i].rootId;
-		// 				currentTmsId = tmsData[i].tmsId;
-		// 				currentMpaa = tmsData[i].ratings[0].code;
-		// 				console.log(currentMpaa);
-		// 			}
-		// 		}
-		// 	});
-		// }
-
 	});
 }
 
