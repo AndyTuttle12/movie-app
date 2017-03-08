@@ -172,6 +172,10 @@ body{
 	margin-bottom: 70px;
 }
 
+#sorts .Active{
+	background-image: linear-gradient(to bottom,#135a97 0,#063a68 100%);
+}
+
 .movie-grid{
 	margin: 60px;
 	height: 100vh;

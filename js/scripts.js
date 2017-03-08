@@ -127,12 +127,25 @@ $(document).ready(function(){
 		});
 	};
 
-	var discoverUrl = discoverBaseUrl;
+	$('.sortBy').click(function(){
+		$('.sortBy').removeClass('Active');
+		$(this).addClass('Active');
+	});
 
+	var discoverUrl = discoverBaseUrl;
 	$('.filter').click(function(){
-		var linkVar = $(this).attr('lval');
-		var sortVar = $('.sortByActive').attr('sval');
 		// console.log(this);
+		var linkVar = $(this).attr('lval');
+		if($('.sortBy.Active').attr('up') === 'true'){
+			var sortVar = $('.sortBy.Active').attr('svalA');
+			$('.sortBy.Active').attr('up':'false');
+		}else{
+			var sortVar = $('.sortBy.Active').attr('svalD');
+			$('.sortBy.Active').attr('up':'true');
+		}
+
+		var sortVar = $('.sortBy.Active').attr('sval');
+		// console.log(sortVar);
 		discoverJSON(linkVar,sortVar);
 	});
 
