@@ -172,6 +172,26 @@ body{
 	margin-bottom: 70px;
 }
 
+.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus{
+	outline-style: none;	
+}
+
+.arrowDown, .arrowUp{
+	font-size: .5em;
+}
+
+.arrowUp{
+	display: none;
+}
+
+.up{
+	display: inline;
+}
+
+.down{
+	display: none;
+}
+
 #sorts .Active{
 	background-image: linear-gradient(to bottom,#135a97 0,#063a68 100%);
 }
