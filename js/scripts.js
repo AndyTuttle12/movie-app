@@ -3,6 +3,7 @@
 	var imageBaseUrl = 'http://image.tmdb.org/t/p';
 	var tmsBaseUrl = 'http://data.tmsapi.com/v1.1';
 	var currentBaseUrl = '';
+	var placeholderImage = './placeholder.jpg';
 	var currentPage = 1;
 	var movieIDArr = [];
 	var mpaaArr = [];
@@ -11,9 +12,10 @@
 	var today = new Date();
 	var apiDate = today.toJSON().slice(0,10);
 	var zip = 30350;
-	const nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US';
-	const discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
-	const upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US';
+	var currentQuery = '';
+	const nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
+	const discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage + '&adult=true';
+	const upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
 	const detailsUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
 	const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + 30075 + '&api_key=' + tmsApiKey;
 	
@@ -38,13 +40,21 @@ $(document).ready(function(){
 		getNowPlaying();
 	});
 
+	// if($(window).scroll(70%)){
+	// 	console.log('Scrolled 70%');
+	// };
+
 	function getNowPlaying(){
+		currentQuery = nowPlayingUrl;
 		$.getJSON(nowPlayingUrl, function(nowPlayingData){
 			// console.log(nowPlayingData);
 			// console.log(nowPlayingUrl);
 			currentBaseUrl = nowPlayingUrl;
-			movieIDArr = [];
-			nowPlayingHTML = '';
+			if( currentPage === 1){
+				movieIDArr = [];
+				nowPlayingHTML = '';
+			}
+			
 			for(let i = 0; i < nowPlayingData.results.length; i++){
 				var title = nowPlayingData.results[i].original_title;
 				var release = nowPlayingData.results[i].release_date;
@@ -53,6 +63,10 @@ $(document).ready(function(){
 				var month = months[protoDate.getMonth(release)];
 				var year = (protoDate.getFullYear(release));
 				var poster = imageBaseUrl + '/w300' + nowPlayingData.results[i].poster_path;
+				
+				if (poster === 'http://image.tmdb.org/t/p/w300null'){
+					poster = placeholderImage;
+				}
 				var nowPlayingID = nowPlayingData.results[i].id;
 				movieIDArr.push(nowPlayingID);
 				// addMpaaRatings();
@@ -103,6 +117,9 @@ $(document).ready(function(){
 				var month = months[protoDate.getMonth(release)];
 				var year = (protoDate.getFullYear(release));
 				var poster = imageBaseUrl + '/w300' + upcomingData.results[i].poster_path;
+				if (poster === 'http://image.tmdb.org/t/p/w300null'){
+					poster = placeholderImage;
+				}
 				var upcomingID = upcomingData.results[i].id;
 				// addMpaaRatings();
 				movieIDArr.push(upcomingID);
@@ -138,13 +155,13 @@ $(document).ready(function(){
 		var linkVar = $(this).attr('lval');
 		if($('.sortBy.Active').attr('up') === 'true'){
 			var sortVar = $('.sortBy.Active').attr('svalA');
-			$('.sortBy.Active').attr('up':'false');
+			$('.sortBy.Active').attr('up','false');
 		}else{
 			var sortVar = $('.sortBy.Active').attr('svalD');
-			$('.sortBy.Active').attr('up':'true');
+			$('.sortBy.Active').attr('up','true');
 		}
-
-		var sortVar = $('.sortBy.Active').attr('sval');
+		console.log(sortVar)
+		// var sortVar = $('.sortBy.Active').attr('svalA');
 		// console.log(sortVar);
 		discoverJSON(linkVar,sortVar);
 	});
@@ -176,6 +193,10 @@ $(document).ready(function(){
 				var year = (protoDate.getFullYear(release));
 				// console.log(release[0]);
 				var poster = imageBaseUrl + '/w300' + discoverData.results[i].poster_path;
+				console.log(poster)
+				if (poster === 'http://image.tmdb.org/t/p/w300null'){
+					poster = placeholderImage;
+				}
 				var discoverID = discoverData.results[i].id;
 				// addMpaaRatings();
 				movieIDArr.push(discoverID);
@@ -194,7 +215,7 @@ $(document).ready(function(){
 				discoverHTML += '</div>';
 			}
 			$('#movie-grid').html(discoverHTML);
-			console.log(movieIDArr);
+			// console.log(movieIDArr);
 		});
 	};
 
@@ -251,6 +272,9 @@ function updateModal(thisMovie){
 		var month = months[protoDate.getMonth(release)];
 		var year = protoDate.getFullYear(release);
 		var poster = imageBaseUrl + '/w300' + detailsData.poster_path;
+		if (poster === 'http://image.tmdb.org/t/p/w300null'){
+			poster = placeholderImage;
+		}
 		var backdrop = imageBaseUrl + '/w600' + detailsData.backdrop_path;
 		var description = detailsData.overview;
 		var runTime = detailsData.runtime;
