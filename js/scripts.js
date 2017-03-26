@@ -5,6 +5,7 @@
 	var currentBaseUrl = '';
 	var placeholderImage = './placeholder.jpg';
 	var currentPage = 1;
+	var currentFilter = 'popular';
 	var movieIDArr = [];
 	var mpaaArr = [];
 	var currentMpaa = 'NR';
@@ -13,11 +14,11 @@
 	var apiDate = today.toJSON().slice(0,10);
 	var zip = 30350;
 	var currentQuery = '';
-	const nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
-	const discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage + '&adult=true';
-	const upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
-	const detailsUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
-	const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + 30075 + '&api_key=' + tmsApiKey;
+	var nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
+	var discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
+	var upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
+	var detailsUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
+	var tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + 30075 + '&api_key=' + tmsApiKey;
 	
 	
 
@@ -30,7 +31,7 @@
 	var favoritesHTML = '';
 
 $(document).ready(function(){
-
+	var currentFilter = 'popular';
 	getNowPlaying();
 
 
@@ -40,12 +41,35 @@ $(document).ready(function(){
 		getNowPlaying();
 	});
 
-	// if($(window).scroll(70%)){
-	// 	console.log('Scrolled 70%');
-	// };
+	$(window).scroll(function(){
+		var newCallStart = $(document).height() - $(window).height();
+		var newCallEnd = $(document).height() - $(window).height();
+		// console.log(newCallStart)
+		// console.log($(window).scrollTop())
+		// console.log(currentFilter)
+		if($(window).scrollTop() >= newCallStart && $(window).scrollTop() <= newCallEnd){
+			currentPage += 1;
+			// console.log(currentPage);
+			nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
+			discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
+			upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
+			// console.log(nowPlayingUrl);
+			// console.log(currentQuery)
+			// console.log(discoverBaseUrl)
+			if(currentQuery === "nowPlaying"){
+				getNowPlaying();
+			}else if(currentQuery === "discover"){
+				var linkVar = $("#"+currentFilter).attr('lval');
+				discoverJSON(linkVar,sortVar);
+			}else if(currentQuery === "upcoming"){
+				getUpcoming();
+			}
+			
+		}
+	});
 
 	function getNowPlaying(){
-		currentQuery = nowPlayingUrl;
+		currentQuery = "nowPlaying";
 		$.getJSON(nowPlayingUrl, function(nowPlayingData){
 			// console.log(nowPlayingData);
 			// console.log(nowPlayingUrl);
@@ -92,22 +116,27 @@ $(document).ready(function(){
 			}
 			
 		});
+		// console.log(currentQuery)
 	};
 
 
 
 	$('.upcoming').click(function(){
+		currentPage = 1;
 		getUpcoming();
 		// console.log('ok');
 	});
 
 	function getUpcoming(){
+		currentQuery = "upcoming";
 		$.getJSON(upcomingBaseUrl, function(upcomingData){
 			// console.log(nowPlayingData);
 			// console.log(upcomingUrl);
 			currentBaseUrl = upcomingBaseUrl;
-			movieIDArr = [];
-			upcomingHTML = '';
+			if( currentPage === 1){
+				movieIDArr = [];
+				upcomingHTML = '';
+			}
 			for(let i = 0; i < upcomingData.results.length; i++){
 				var title = upcomingData.results[i].original_title;
 				var release = upcomingData.results[i].release_date;
@@ -142,6 +171,7 @@ $(document).ready(function(){
 			}
 			$('#movie-grid').html(upcomingHTML);
 		});
+		// console.log(currentQuery)
 	};
 	var sortVar = $('.sortBy.Active').attr('svalD');
 
@@ -165,10 +195,10 @@ $(document).ready(function(){
 
 	var discoverUrl = discoverBaseUrl;
 	$('.filter').click(function(){
-		// console.log(this);
+		currentFilter = $(this).attr('id');
 		var linkVar = $(this).attr('lval');
-		
-		console.log(sortVar)
+		currentPage = 1;
+		// console.log(sortVar)
 		// var sortVar = $('.sortBy.Active').attr('svalA');
 		// console.log(sortVar);
 		discoverJSON(linkVar,sortVar);
@@ -182,15 +212,16 @@ $(document).ready(function(){
 		var discoverUrl = '';
 		discoverUrl = discoverBaseUrl + linkVar + sortVar;
 		// console.log(discoverUrl);
-
+		currentQuery = "discover";
 		$.getJSON(discoverUrl, function(discoverData){
 			// console.log(discoverData);
 			currentBaseUrl = discoverUrl;
-			movieIDArr = [];
-			mpaaArr = [];
+			if( currentPage === 1){
+				movieIDArr = [];
+				mpaaArr = [];
+				discoverHTML = '';
+			}
 			
-
-			discoverHTML = '';
 			for(let i = 0; i < discoverData.results.length; i++){
 				var title = discoverData.results[i].original_title;
 				var release = discoverData.results[i].release_date;
@@ -201,7 +232,7 @@ $(document).ready(function(){
 				var year = (protoDate.getFullYear(release));
 				// console.log(release[0]);
 				var poster = imageBaseUrl + '/w300' + discoverData.results[i].poster_path;
-				console.log(poster)
+				// console.log(poster)
 				if (poster === 'http://image.tmdb.org/t/p/w300null'){
 					poster = placeholderImage;
 				}
@@ -225,6 +256,7 @@ $(document).ready(function(){
 			$('#movie-grid').html(discoverHTML);
 			// console.log(movieIDArr);
 		});
+		// console.log(currentQuery)
 	};
 
 	$('.main-menu-tab').click(function(){
@@ -268,7 +300,7 @@ function updateModal(thisMovie){
 	// });
 
 	$.getJSON(currentUrl, function(detailsData){
-		console.log(detailsData);
+		// console.log(detailsData);
 		
 		var zip = 30075;
 		var title = detailsData.original_title;
@@ -413,29 +445,29 @@ function updateModal(thisMovie){
 			$('#heart').toggleClass('fa fa-heart-o');
 			var favArray = [];
 			var old = localStorage.getItem('favorite');
-			console.log(old);
-			console.log(currentID);
+			// console.log(old);
+			// console.log(currentID);
 			
 		    if(old === null){
 		    	localStorage.setItem('favorite', currentID);
 		    	old = localStorage.getItem('favorite');
 		    	favArray.push(old);
-		    	console.log(favArray);
+		    	// console.log(favArray);
 		    }else if(old === currentID){
 		    	localStorage.removeItem('favorite');
-		    	console.log(favArray);
+		    	// console.log(favArray);
 		    }else{
 		    	favArray = old.split(',');
-		    	console.log(favArray);
+		    	// console.log(favArray);
 		    	
 		    	for(let i = 0; i < favArray.length; i++){
-					console.log(favArray[i]);
+					// console.log(favArray[i]);
 					if(favArray[i] == currentID){
 						removeFromStorage('favorite', currentID);
-						console.log('I was removed');
+						// console.log('I was removed');
 						break;
 					}else if(favArray.indexOf(currentID, 0) === -1){
-						console.log('I need to be added');
+						// console.log('I need to be added');
 						appendToStorage('favorite', currentID);
 						break;
 					}
@@ -444,11 +476,11 @@ function updateModal(thisMovie){
 			
 
 			function appendToStorage(name, data){ 
-				console.log(old);
+				// console.log(old);
 			    localStorage.setItem(name, old + ',' + data);
 			}
 			function removeFromStorage(name, data){
-			    console.log(favArray);
+			    // console.log(favArray);
 			    for(let i = 0; i < favArray.length; i++){
 			    	if(favArray[i] == currentID){
 			    		favArray.splice(i,1);
@@ -456,9 +488,10 @@ function updateModal(thisMovie){
 			    }
 			    var favString = favArray.join();
 			    localStorage.setItem('favorite', favString);
-			    console.log(favString);
+			    // console.log(favString);
 			}			
 		});
+		// console.log(currentQuery)
 	});
 }
 
