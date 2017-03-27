@@ -273,6 +273,21 @@ body{
 	margin: 200px auto 20px 80px;
 }
 
+.trailer-modal .modal-dialog{
+	width: 100vw;
+	height: 100%;
+	margin: auto;
+	background-color: transparent;
+	border-radius: 0px;
+	color: #fff;
+	opacity: 1;
+	overflow: hidden;
+}
+#trailer-content{
+	width: 100%;
+	height: 95%;
+}
+
 .movie-modal .modal-dialog{
 	width: 72%;
 	height: 100%;
@@ -396,6 +411,24 @@ body{
 
 #trailer{
 	float: left;
+}
+
+#trailer-btn{
+	width: 35%;
+	height: 30px;
+	font-size: 16px;
+	line-height: 16px;
+	margin: auto;
+	margin-left: 102px;
+	text-align: center;
+	background-color: #ddd;
+}
+#trailer-btn a {
+	color: #222;
+	text-decoration: none;
+}
+#trailer-btn a:focus{
+	outline-style: none;
 }
 
 #movie-rating{

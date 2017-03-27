@@ -293,6 +293,7 @@ function updateModal(thisMovie){
 	var ratingHTML = '';
 	var backdropHTML = '';
 	var ticketsHTML = '';
+	var trailerHTML = '';
 	// console.log(currentUrl);
 
 	// $.getJSON(discoverUrl, function(){
@@ -319,6 +320,7 @@ function updateModal(thisMovie){
 		var description = detailsData.overview;
 		var runTime = detailsData.runtime;
 		var webSite = detailsData.homepage;
+		var trailerId = detailsData.videos.results[0].key;
 		var ratingAvg = detailsData.vote_average;
 		var ratingCount = detailsData.vote_count;
 		var genre = '';
@@ -394,7 +396,8 @@ function updateModal(thisMovie){
 		titleHTML += '</p';
 		if(webSite != ""){
 		infoHTML += '<p>';
-		infoHTML += '<span id="web-site"><a href="' + webSite + '" target="_blank">Visit the Website Here</a><span id="trailer"> </span>';
+			infoHTML += '<span id="web-site"><a href="' + webSite + '" target="_blank">Visit the Website Here</a></span>';
+			infoHTML += '<span id="trailer-btn" class="btn btn-secondary"><a id="trailer-link" href="#" data-toggle="modal" data-target=".trailer-modal"  data-theVideo="https://www.youtube.com/embed/' + trailerId + '">View the trailer</a></span>';
 		infoHTML += '</p>';
 		}
 		ratingHTML += '<div>';
@@ -413,6 +416,9 @@ function updateModal(thisMovie){
 				ticketsHTML += '<a href="http://www.fandango.com/moviesintheaters" target="_blank" id="tickets-button" class="btn btn-lg btn-primary"><img width="30px" src="fandango-icon.png"> Get Tickets</a>';
 			ticketsHTML += '</div>';
 		}
+
+		trailerHTML += '<iframe id="player" src="" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>';
+
 
 		var savedFavorite = localStorage.getItem('favorite');
 		// console.log(savedFavorite);
@@ -437,6 +443,7 @@ function updateModal(thisMovie){
 		$('#movie-poster').html(posterHTML);
 		$('.modal-movie-title').html(titleHTML);
 		$('#trailer').html(infoHTML);
+		$('#trailer-content').html(trailerHTML);
 		$('#movie-rating').html(ratingHTML);
 		$('.tickets').html(ticketsHTML);
 		$('[data-toggle="tooltip"]').tooltip();
@@ -491,7 +498,20 @@ function updateModal(thisMovie){
 			    // console.log(favString);
 			}			
 		});
-		// console.log(currentQuery)
+
+		function autoPlayYouTubeModal(){
+			var trigger = $(".modal-body").find('[data-toggle="modal"]');
+			trigger.click(function() {
+				var theModal = $(this).data( "target" )
+				videoSRC = $(this).attr( "data-theVideo" )
+				videoSRCauto = videoSRC+"?autoplay=1" ;
+				$(theModal+' iframe').attr('src', videoSRCauto);
+				$(theModal).on('hidden.bs.modal',function () {
+					$(theModal+' iframe').attr('src', videoSRC);
+				});	 
+			});
+		}
+		autoPlayYouTubeModal();
 	});
 }
 
