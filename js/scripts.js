@@ -69,8 +69,11 @@ $(document).ready(function(){
 	$('.search-form').submit(function(event){
 		event.preventDefault();
 		searchQuery = $('.search-field').val();
+		currentPage = 1;
 		searchMoviesUrl = apiBaseUrl + '/search/movie?api_key=' + apiKey + '&query=' + searchQuery + '&region=US' + '&page=' + currentPage;
+
 		searchMovies(searchQuery);
+
 	});
 
 
@@ -119,6 +122,7 @@ $(document).ready(function(){
 			if( currentPage === 1){
 				movieIDArr = [];
 				searchHTML = '';
+				$('body').scrollTop(0);
 			}
 			
 			for(let i = 0; i < searchData.results.length; i++){
@@ -166,6 +170,7 @@ $(document).ready(function(){
 			if( currentPage === 1){
 				movieIDArr = [];
 				nowPlayingHTML = '';
+				$('body').scrollTop(0);
 			}
 			
 			for(let i = 0; i < nowPlayingData.results.length; i++){
@@ -225,6 +230,7 @@ $(document).ready(function(){
 			if( currentPage === 1){
 				movieIDArr = [];
 				upcomingHTML = '';
+				$('body').scrollTop(0);
 			}
 			for(let i = 0; i < upcomingData.results.length; i++){
 				var title = upcomingData.results[i].original_title;
@@ -309,6 +315,7 @@ $(document).ready(function(){
 				movieIDArr = [];
 				mpaaArr = [];
 				discoverHTML = '';
+				$('body').scrollTop(0);
 			}
 			
 			for(let i = 0; i < discoverData.results.length; i++){
