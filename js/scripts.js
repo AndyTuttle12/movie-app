@@ -14,7 +14,9 @@
 	var apiDate = today.toJSON().slice(0,10);
 	var zip = 30350;
 	var currentQuery = '';
+	var searchQuery = '';
 	var nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
+	var searchMoviesUrl = apiBaseUrl + '/search/movie?api_key=' + apiKey + '&query=' + searchQuery + '&region=US' + '&page=' + currentPage;
 	var discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
 	var upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
 	var detailsUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
@@ -33,9 +35,45 @@
 $(document).ready(function(){
 	var currentFilter = 'popular';
 	getNowPlaying();
+	// $('*').focus(function(){
+	// 	$('*').toggleClass('focused');
+	// });
+
+	$('.fa-search').click(function(event){
+		event.preventDefault();
+		if($('.search-field').hasClass('active-search') && $('.search-field').val() !== ''){
+			console.log($('.search-field').val())
+			$('.search-form').submit();
+		}else{
+			$('.search-field').toggleClass('hidden-search');
+			$('.search-field').toggleClass('active-search');
+		}
+	});
+
+	$('.search-field').on('input',function(){
+		$('.fa-times-circle').removeClass('hidden');
+	});
+
+	$('.fa-times-circle').click(function(){
+		$('.fa-times-circle').addClass('hidden');
+		$('.search-field').val('');
+	});
+
+	$('.search-field').blur(function(){
+		if($('.search-field').val() === ''){
+			$('.search-field').addClass('hidden-search');
+			$('.search-field').removeClass('active-search');
+		}
+	});
+
+	$('.search-form').submit(function(event){
+		event.preventDefault();
+		searchQuery = $('.search-field').val();
+		searchMoviesUrl = apiBaseUrl + '/search/movie?api_key=' + apiKey + '&query=' + searchQuery + '&region=US' + '&page=' + currentPage;
+		searchMovies(searchQuery);
+	});
 
 
-	
 
 	$('.playing').click(function(){
 		getNowPlaying();
@@ -53,6 +91,7 @@ $(document).ready(function(){
 			nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
 			discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
 			upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
+			searchMoviesUrl = apiBaseUrl + '/search/movie?api_key=' + apiKey + '&query=' + searchQuery + '&region=US' + '&page=' + currentPage;
 			// console.log(nowPlayingUrl);
 			// console.log(currentQuery)
 			// console.log(discoverBaseUrl)
@@ -63,10 +102,60 @@ $(document).ready(function(){
 				discoverJSON(linkVar,sortVar);
 			}else if(currentQuery === "upcoming"){
 				getUpcoming();
+			}else if(currentQuery === "searchMovies"){
+				searchQuery = $('.search-field').val();
+				searchMoviesUrl = apiBaseUrl + '/search/movie?api_key=' + apiKey + '&query=' + searchQuery + '&region=US' + '&page=' + currentPage;
+				searchMovies(searchQuery);
 			}
 			
 		}
 	});
+
+	function searchMovies(searchQuery){
+		currentQuery = "searchMovies"; 
+		$.getJSON(searchMoviesUrl, function(searchData){
+			console.log(searchData)
+			currentBaseUrl = searchMoviesUrl;
+			if( currentPage === 1){
+				movieIDArr = [];
+				searchHTML = '';
+			}
+			
+			for(let i = 0; i < searchData.results.length; i++){
+				var title = searchData.results[i].original_title;
+				var release = searchData.results[i].release_date;
+				var protoDate = new Date(release);
+				var day = (protoDate.getDate(release)+1);
+				var month = months[protoDate.getMonth(release)];
+				var year = (protoDate.getFullYear(release));
+				var poster = imageBaseUrl + '/w300' + searchData.results[i].poster_path;
+				
+				if (poster === 'http://image.tmdb.org/t/p/w300null'){
+					poster = placeholderImage;
+				}
+				var searchID = searchData.results[i].id;
+				movieIDArr.push(searchID);
+
+				searchHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + searchID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
+					searchHTML += '<img src="' + poster + '">';
+					searchHTML += '<div class="overlay">';
+						searchHTML += '<div class="movie-title">';
+							searchHTML += '<h2>' + title + '</h2>';
+							searchHTML += '<h4>Released: ' + month + ' ' + day + ', ' + year + '<h4>';
+						searchHTML += '</div>';
+						searchHTML += '<div class="movie-rating text-center">';
+							searchHTML += '';
+						searchHTML += '</div>';
+					searchHTML += '</div>';
+				searchHTML += '</div>';
+
+				setTimeout(function(){
+					$('#movie-grid').html(searchHTML);
+					// $('.movie-item').addClass('view');
+				}, 200);
+			}
+		});
+	};
 
 	function getNowPlaying(){
 		currentQuery = "nowPlaying";
@@ -301,7 +390,7 @@ function updateModal(thisMovie){
 	// });
 
 	$.getJSON(currentUrl, function(detailsData){
-		// console.log(detailsData);
+		console.log(detailsData);
 		
 		var zip = 30075;
 		var title = detailsData.original_title;
@@ -320,7 +409,11 @@ function updateModal(thisMovie){
 		var description = detailsData.overview;
 		var runTime = detailsData.runtime;
 		var webSite = detailsData.homepage;
-		var trailerId = detailsData.videos.results[0].key;
+		if (detailsData.videos.results.length > 0){
+			var trailerId = detailsData.videos.results[0].key;
+		}else{
+			var trailerId = undefined;
+		}
 		var ratingAvg = detailsData.vote_average;
 		var ratingCount = detailsData.vote_count;
 		var genre = '';

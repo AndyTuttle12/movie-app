@@ -2,6 +2,13 @@
 	font-family: 'Open Sans';
 	font-weight: bold;
 }
+*:focus{
+	outline-style: none;
+}
+
+.focused{
+	border: 1px solid aqua;
+}
 
 body{
 	background-color: #444;
@@ -58,7 +65,73 @@ body{
 #right-header{
 	float: right;
 	height: 50px;
-	margin-top: 15px;
+	margin-top: 12px;
+	display: inline-block;
+}
+
+div.favorites-button{
+	display: inline;
+	margin-left: 20px;
+}
+div.search-area{
+	display: inline;
+	width: 90%;
+	height: auto;
+}
+
+.fa-search:hover, .fa-search:active{
+	color: gold;
+}
+
+.search-form{
+	height: auto;
+	width: auto;
+	margin: 0 auto;
+	display: inline;
+}
+
+.search-field{
+	border: none;
+	border-radius: 15px;
+	padding: 0 10px;
+	line-height: 20px;
+	font-size: 20px;
+	color: #000;
+	margin-right: 10px;
+	width: 0;
+	opacity: 0;
+	transform: translateX(10px);
+	transition: width opacity transform 1s;
+}
+
+.search-field.active-search{
+	transition: all 1s;
+	width: 50%;
+	opacity: 1;
+	transform: translateX(-10px);
+}
+
+.search-field.hidden-search{
+	transition: all 1s;
+	width: 0%;
+	opacity: 0;
+	transform: translateX(10px);
+}
+
+.fa-times-circle.fa-lg{
+	position: relative;
+	z-index: 2;
+	margin:0px 30px 0px -50px;
+	color: red;
+	vertical-align: 0%;
+}
+.hidden{
+	display: none;
+}
+
+.search-button{
+	background-color: transparent;
+	border: none;
 }
 
 .main-menu{
