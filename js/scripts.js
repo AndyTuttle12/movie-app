@@ -359,7 +359,17 @@ $(document).ready(function(){
 		animateMenu();
 	});
 
-	const favoritesUrl = apiBaseUrl
+	$('.favorites-button').click(function(){
+		console.log(localStorage.favorite)
+		var favStr = localStorage.favorite;
+		var favArray = favStr.split(',');
+		console.log(favArray)
+		// for(let i=0; i<favArray.length){
+		// 	show
+		// }
+	});
+
+	const favoritesUrl = apiBaseUrl;
 
 	function showFavorites(favorite){
 		$.getJSON(favoritesUrl, function(favoritesData){
