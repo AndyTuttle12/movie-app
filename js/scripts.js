@@ -34,6 +34,8 @@
 
 $(document).ready(function(){
 	var currentFilter = 'popular';
+	$('.main-menu a p').removeClass('active-browse');
+	$('.playing p').addClass('active-browse');
 	getNowPlaying();
 	// $('*').focus(function(){
 	// 	$('*').toggleClass('focused');
@@ -42,7 +44,7 @@ $(document).ready(function(){
 	$('.fa-search').click(function(event){
 		event.preventDefault();
 		if($('.search-field').hasClass('active-search') && $('.search-field').val() !== ''){
-			console.log($('.search-field').val())
+			// console.log($('.search-field').val())
 			$('.search-form').submit();
 		}else{
 			$('.search-field').toggleClass('hidden-search');
@@ -68,6 +70,7 @@ $(document).ready(function(){
 
 	$('.search-form').submit(function(event){
 		event.preventDefault();
+		$('.main-menu a p').removeClass('active-browse');
 		searchQuery = $('.search-field').val();
 		currentPage = 1;
 		searchMoviesUrl = apiBaseUrl + '/search/movie?api_key=' + apiKey + '&query=' + searchQuery + '&region=US' + '&page=' + currentPage;
@@ -79,6 +82,10 @@ $(document).ready(function(){
 
 
 	$('.playing').click(function(){
+		$('.main-menu a p').removeClass('active-browse');
+		$('.playing p').addClass('active-browse');
+		currentPage = 1;
+		nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
 		getNowPlaying();
 	});
 
@@ -116,8 +123,9 @@ $(document).ready(function(){
 
 	function searchMovies(searchQuery){
 		currentQuery = "searchMovies"; 
+		$('.fa-heart').removeClass('active-favorites');
 		$.getJSON(searchMoviesUrl, function(searchData){
-			console.log(searchData)
+			// console.log(searchData)
 			currentBaseUrl = searchMoviesUrl;
 			if( currentPage === 1){
 				movieIDArr = [];
@@ -163,8 +171,9 @@ $(document).ready(function(){
 
 	function getNowPlaying(){
 		currentQuery = "nowPlaying";
+		$('.fa-heart').removeClass('active-favorites');
 		$.getJSON(nowPlayingUrl, function(nowPlayingData){
-			// console.log(nowPlayingData);
+			console.log(nowPlayingData);
 			// console.log(nowPlayingUrl);
 			currentBaseUrl = nowPlayingUrl;
 			if( currentPage === 1){
@@ -181,48 +190,68 @@ $(document).ready(function(){
 				var month = months[protoDate.getMonth(release)];
 				var year = (protoDate.getFullYear(release));
 				var poster = imageBaseUrl + '/w300' + nowPlayingData.results[i].poster_path;
-				
 				if (poster === 'http://image.tmdb.org/t/p/w300null'){
 					poster = placeholderImage;
 				}
+				var ratingAvg = nowPlayingData.results[i].vote_average;
 				var nowPlayingID = nowPlayingData.results[i].id;
+				// console.log(nowPlayingID)
+				var savedFavorite = localStorage.getItem('favorite');
+				if(savedFavorite == null){
+					savedFavorite = "";	
+				}
+				var savedArray = savedFavorite.split(',');
 				movieIDArr.push(nowPlayingID);
 				// addMpaaRatings();
 				// console.log(movieIDArr);
-
-				nowPlayingHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + nowPlayingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
-					nowPlayingHTML += '<img src="' + poster + '">';
-					nowPlayingHTML += '<div class="overlay">';
-						nowPlayingHTML += '<div class="movie-title">';
-							nowPlayingHTML += '<h2>' + title + '</h2>';
-							nowPlayingHTML += '<h4>Released: ' + month + ' ' + day + ', ' + year + '<h4>';
-						nowPlayingHTML += '</div>';
-						nowPlayingHTML += '<div class="movie-rating text-center">';
-							nowPlayingHTML += '';
+				for(let j = 0; j < savedArray.length; j++){
+					console.log(nowPlayingID)
+					nowPlayingHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + nowPlayingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
+						nowPlayingHTML += '<img src="' + poster + '">';
+						nowPlayingHTML += '<div class="overlay">';
+							nowPlayingHTML += '<div class="movie-title">';
+								nowPlayingHTML += '<h2>' + title + '</h2>';
+								nowPlayingHTML += '<h4>Released: ' + month + ' ' + day + ', ' + year + '<h4>';
+							nowPlayingHTML += '</div>';
+							nowPlayingHTML += '<div id="details" class="details text-center">';
+								if(savedArray[j] == nowPlayingID){
+									nowPlayingHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart" aria-hidden="true"></i></span></p>';
+								}else{
+									nowPlayingHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart-o" aria-hidden="true"></i></span></p>';
+								}
+								nowPlayingHTML += '<p><span id="overlay-stars">';
+									nowPlayingHTML += '<div class="star-ratings"><a href="#" data-toggle="tooltip" data-placement="top" title="' + (ratingAvg * 10) + '%">';
+										nowPlayingHTML += '<div class="star-ratings-top" style="width: ' + (ratingAvg * 10) + '%"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>';
+										nowPlayingHTML += '<div class="star-ratings-bottom"><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span></div>';
+									nowPlayingHTML += '</a></div>';
+								nowPlayingHTML += '</span></p>';
+							nowPlayingHTML += '</div>';
 						nowPlayingHTML += '</div>';
 					nowPlayingHTML += '</div>';
-				nowPlayingHTML += '</div>';
-
+				}
+					
 				setTimeout(function(){
 					$('#movie-grid').html(nowPlayingHTML);
 					// $('.movie-item').addClass('view');
 				}, 200);
-			}
-			
+			}			
 		});
-		// console.log(currentQuery)
 	};
 
 
 
 	$('.upcoming').click(function(){
 		currentPage = 1;
+		$('.main-menu a p').removeClass('active-browse');
+		$('.upcoming p').addClass('active-browse');
+		upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
 		getUpcoming();
 		// console.log('ok');
 	});
 
 	function getUpcoming(){
 		currentQuery = "upcoming";
+		$('.fa-heart').removeClass('active-favorites');
 		$.getJSON(upcomingBaseUrl, function(upcomingData){
 			// console.log(nowPlayingData);
 			// console.log(upcomingUrl);
@@ -292,7 +321,10 @@ $(document).ready(function(){
 	$('.filter').click(function(){
 		currentFilter = $(this).attr('id');
 		var linkVar = $(this).attr('lval');
+		$('.main-menu a p').removeClass('active-browse');
+		$('#'+currentFilter+' p').addClass('active-browse');
 		currentPage = 1;
+		discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
 		// console.log(sortVar)
 		// var sortVar = $('.sortBy.Active').attr('svalA');
 		// console.log(sortVar);
@@ -305,6 +337,7 @@ $(document).ready(function(){
 
 	function discoverJSON(linkVar,sortVar){
 		var discoverUrl = '';
+		$('.fa-heart').removeClass('active-favorites');
 		discoverUrl = discoverBaseUrl + linkVar + sortVar;
 		// console.log(discoverUrl);
 		currentQuery = "discover";
@@ -360,26 +393,153 @@ $(document).ready(function(){
 	});
 
 	$('.favorites-button').click(function(){
-		console.log(localStorage.favorite)
+		favoritesHTML = '';
+		currentQuery = 'favorites';
+		$('.main-menu a p').removeClass('active-browse');
+		$('.fa.fa-heart').addClass('active-favorites');
+		$('#movie-grid').html(favoritesHTML);
+		// console.log(localStorage.favorite)
 		var favStr = localStorage.favorite;
 		var favArray = favStr.split(',');
-		console.log(favArray)
-		// for(let i=0; i<favArray.length){
-		// 	show
-		// }
+		// console.log(favArray)
+		for(let i=0; i<favArray.length; i++){
+			showFavorites(favArray[i]);
+		}
+		
 	});
 
-	const favoritesUrl = apiBaseUrl;
+	
 
 	function showFavorites(favorite){
+		var favoritesUrl = apiBaseUrl + '/movie/' + favorite + '?api_key=' + apiKey;
 		$.getJSON(favoritesUrl, function(favoritesData){
-			
+			// console.log(favoritesData)
+			var title = favoritesData.original_title;
+			var release = favoritesData.release_date;
+			var protoDate = new Date(release);
+			var day = (protoDate.getDate(release)+1);
+			var month = months[protoDate.getMonth(release)];
+			var year = (protoDate.getFullYear(release));
+			var poster = imageBaseUrl + '/w300' + favoritesData.poster_path;
+			if (poster === 'http://image.tmdb.org/t/p/w300null'){
+				poster = placeholderImage;
+			}
+			favoritesHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + favorite + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
+				favoritesHTML += '<img src="' + poster + '">';
+				favoritesHTML += '<div class="overlay">';
+					favoritesHTML += '<div class="movie-title">';
+						favoritesHTML += '<h2>' + title + '</h2>';
+						favoritesHTML += '<h4>' + month + ' ' + year + '<h4>';
+					favoritesHTML += '</div>';
+					favoritesHTML += '<div class="movie-rating text-center">';
+						favoritesHTML += '';
+					favoritesHTML += '</div>';
+				favoritesHTML += '</div>';
+			favoritesHTML += '</div>';
+			$('#movie-grid').html(favoritesHTML);
 		});
 	}
-
 });
 
 
+
+// $('#heart').removeClass();
+// // $('#main-content').html(backdropHTML);
+// $('#movie-poster').html(posterHTML);
+// $('.modal-movie-title').html(titleHTML);
+// $('#trailer').html(infoHTML);
+// $('#trailer-content').html(trailerHTML);
+// $('#movie-rating').html(ratingHTML);
+// $('.tickets').html(ticketsHTML);
+// $('[data-toggle="tooltip"]').tooltip();
+// $('#heart').click(function(){
+// 	$('#heart').toggleClass('fa fa-heart');
+// 	$('#heart').toggleClass('fa fa-heart-o');
+// 	var favArray = [];
+// 	var old = localStorage.getItem('favorite');
+// 	// console.log(old);
+// 	// console.log(currentID);
+	
+//     if(old === null){
+//     	localStorage.setItem('favorite', currentID);
+//     	old = localStorage.getItem('favorite');
+//     	favArray.push(old);
+//     	// console.log(favArray);
+//     }else if(old === currentID){
+//     	localStorage.removeItem('favorite');
+//     	// console.log(favArray);
+//     }else{
+//     	favArray = old.split(',');
+//     	// console.log(favArray);
+    	
+//     	for(let i = 0; i < favArray.length; i++){
+// 			// console.log(favArray[i]);
+// 			if(favArray[i] == currentID){
+// 				removeFromStorage('favorite', currentID);
+// 				// console.log('I was removed');
+// 				break;
+// 			}else if(favArray.indexOf(currentID, 0) === -1){
+// 				// console.log('I need to be added');
+// 				appendToStorage('favorite', currentID);
+// 				break;
+// 			}
+// 		}
+//     }
+	
+
+// 	function appendToStorage(name, data){ 
+// 		// console.log(old);
+// 	    localStorage.setItem(name, old + ',' + data);
+// 	}
+// 	function removeFromStorage(name, data){
+// 	    // console.log(favArray);
+// 	    for(let i = 0; i < favArray.length; i++){
+// 	    	if(favArray[i] == currentID){
+// 	    		favArray.splice(i,1);
+// 	    	}
+// 	    }
+// 	    var favString = favArray.join();
+// 	    localStorage.setItem('favorite', favString);
+// 	    if(currentQuery === 'favorites'){
+// 		    favoritesHTML = '';
+// 			$('#movie-grid').html(favoritesHTML);
+// 			var favArr = favString.split(',');
+// 			// console.log(favArr)
+// 			for(let i=0; i<favArr.length; i++){
+// 				updateFavorites(favArr[i]);
+// 			}
+// 		}
+// 	}
+// 	function updateFavorites(favorite){
+// 		var favoritesUrl = apiBaseUrl + '/movie/' + favorite + '?api_key=' + apiKey;
+// 		$.getJSON(favoritesUrl, function(favoritesData){
+// 			// console.log(favoritesData)
+// 			var title = favoritesData.original_title;
+// 			var release = favoritesData.release_date;
+// 			var protoDate = new Date(release);
+// 			var day = (protoDate.getDate(release)+1);
+// 			var month = months[protoDate.getMonth(release)];
+// 			var year = (protoDate.getFullYear(release));
+// 			var poster = imageBaseUrl + '/w300' + favoritesData.poster_path;
+// 			if (poster === 'http://image.tmdb.org/t/p/w300null'){
+// 				poster = placeholderImage;
+// 			}
+// 			favoritesHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + favorite + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
+// 				favoritesHTML += '<img src="' + poster + '">';
+// 				favoritesHTML += '<div class="overlay">';
+// 					favoritesHTML += '<div class="movie-title">';
+// 						favoritesHTML += '<h2>' + title + '</h2>';
+// 						favoritesHTML += '<h4>' + month + ' ' + year + '<h4>';
+// 					favoritesHTML += '</div>';
+// 					favoritesHTML += '<div class="movie-rating text-center">';
+// 						favoritesHTML += '';
+// 					favoritesHTML += '</div>';
+// 				favoritesHTML += '</div>';
+// 			favoritesHTML += '</div>';
+// 			$('#movie-grid').html(favoritesHTML);
+// 		});
+// 	}			
+// });
 
 function animateMenu(){
 	$('.main-menu').toggleClass('active');
@@ -402,12 +562,8 @@ function updateModal(thisMovie){
 	var trailerHTML = '';
 	// console.log(currentUrl);
 
-	// $.getJSON(discoverUrl, function(){
-
-	// });
-
 	$.getJSON(currentUrl, function(detailsData){
-		console.log(detailsData);
+		// console.log(detailsData);
 		
 		var zip = 30075;
 		var title = detailsData.original_title;
@@ -605,7 +761,44 @@ function updateModal(thisMovie){
 			    }
 			    var favString = favArray.join();
 			    localStorage.setItem('favorite', favString);
-			    // console.log(favString);
+			    if(currentQuery === 'favorites'){
+				    favoritesHTML = '';
+					$('#movie-grid').html(favoritesHTML);
+					var favArr = favString.split(',');
+					// console.log(favArr)
+					for(let i=0; i<favArr.length; i++){
+						updateFavorites(favArr[i]);
+					}
+				}
+			}
+			function updateFavorites(favorite){
+				var favoritesUrl = apiBaseUrl + '/movie/' + favorite + '?api_key=' + apiKey;
+				$.getJSON(favoritesUrl, function(favoritesData){
+					// console.log(favoritesData)
+					var title = favoritesData.original_title;
+					var release = favoritesData.release_date;
+					var protoDate = new Date(release);
+					var day = (protoDate.getDate(release)+1);
+					var month = months[protoDate.getMonth(release)];
+					var year = (protoDate.getFullYear(release));
+					var poster = imageBaseUrl + '/w300' + favoritesData.poster_path;
+					if (poster === 'http://image.tmdb.org/t/p/w300null'){
+						poster = placeholderImage;
+					}
+					favoritesHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + favorite + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
+						favoritesHTML += '<img src="' + poster + '">';
+						favoritesHTML += '<div class="overlay">';
+							favoritesHTML += '<div class="movie-title">';
+								favoritesHTML += '<h2>' + title + '</h2>';
+								favoritesHTML += '<h4>' + month + ' ' + year + '<h4>';
+							favoritesHTML += '</div>';
+							favoritesHTML += '<div class="movie-rating text-center">';
+								favoritesHTML += '';
+							favoritesHTML += '</div>';
+						favoritesHTML += '</div>';
+					favoritesHTML += '</div>';
+					$('#movie-grid').html(favoritesHTML);
+				});
 			}			
 		});
 

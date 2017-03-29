@@ -201,6 +201,7 @@ div.search-area{
 
 .main-menu a{
 	box-sizing: border-box;
+	text-decoration: none;
 	color: #fff;
 }
 
@@ -208,6 +209,12 @@ div.search-area{
 	color: #fff;
 	text-decoration: none;
 	font-weight: bolder;
+}
+
+.active-browse{
+	background-color: #337ab7;
+	color: #fff;
+	border-radius: 5px;
 }
 
 .main-menu p{
@@ -234,6 +241,9 @@ div.search-area{
 
 #bottom-menu{
 	position: fixed;
+	width: 100%;
+	padding: 0 10px;
+	margin-left: -20px;
 	bottom: 0;
 	background-color: #333;
 }
@@ -333,6 +343,37 @@ div.search-area{
 
 .movie-item:hover .overlay .movie-title{
 	opacity: 1;
+}
+
+.overlay #details{
+	width: 100%;
+	height: auto;
+	margin: 100px auto;
+	position: relative;
+	z-index: 99;
+}
+
+#details #overlay-heart .fa{
+	transition: all .2s;
+	font-weight: bold;
+}
+
+#details #overlay-heart .fa:hover{
+	transition: all .2s;
+	color: red;
+}
+
+#details .star-ratings{
+	font-size: 30px;
+	width: 150px;
+}
+
+#details .star-ratings span{
+	width: 30px;
+}
+
+#details .star-ratings-bottom{
+	width: 150px;
 }
 
 .movie-title{
@@ -512,23 +553,35 @@ div.search-area{
 }
 
 #heart{
+	transition: all .2s;
 	font-weight: bold;
 }
 
 #heart:hover{
+	transition: all .2s;
 	color: red;
 }
 
 .fa-heart-o{
+	transition: all .2s;
 	color: #fff;
 }
 
 .fa-heart{
+	transition: all .2s;
 	color: #fff;
+	transform: scale(1);
 }
 
 .fa-heart:hover{
+	transition: all .2s;
 	color: red;
+}
+
+.active-favorites{
+	transition: all .4s;
+	color: red;
+	transform: scale(1.4);
 }
 
 #stars{
