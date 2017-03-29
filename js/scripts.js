@@ -1,50 +1,51 @@
-// for all API calls:
-	var apiBaseUrl = 'http://api.themoviedb.org/3';
-	var imageBaseUrl = 'http://image.tmdb.org/t/p';
-	var tmsBaseUrl = 'http://data.tmsapi.com/v1.1';
-	var currentBaseUrl = '';
-	var placeholderImage = './placeholder.jpg';
-	var currentPage = 1;
-	var currentFilter = 'popular';
-	var movieIDArr = [];
-	var mpaaArr = [];
-	var currentMpaa = 'NR';
-	var currentID = 0;
-	var today = new Date();
-	var apiDate = today.toJSON().slice(0,10);
-	var zip = 30350;
-	var currentQuery = '';
-	var searchQuery = '';
-	var nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
-	var searchMoviesUrl = apiBaseUrl + '/search/movie?api_key=' + apiKey + '&query=' + searchQuery + '&region=US' + '&page=' + currentPage;
-	var discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
-	var upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
-	var detailsUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
-	var tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + 30075 + '&api_key=' + tmsApiKey;
-	
-	
+// Javascript and jQuery scripts for Movie Time App
+///////////////////////
+// Globals
+///////////////////////
+var apiBaseUrl = 'http://api.themoviedb.org/3';
+var imageBaseUrl = 'http://image.tmdb.org/t/p';
+var tmsBaseUrl = 'http://data.tmsapi.com/v1.1';
+var currentBaseUrl = '';
+var placeholderImage = './placeholder.jpg';
+var currentPage = 1;
+var currentFilter = 'popular';
+var movieIDArr = [];
+var mpaaArr = [];
+var currentMpaa = 'NR';
+var currentID = 0;
+var today = new Date();
+var apiDate = today.toJSON().slice(0,10);
+var zip = 30350;
+var currentQuery = '';
+var searchQuery = '';
+var nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
+var searchMoviesUrl = apiBaseUrl + '/search/movie?api_key=' + apiKey + '&query=' + searchQuery + '&region=US' + '&page=' + currentPage;
+var discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
+var upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
+var detailsUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
+var tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + 30075 + '&api_key=' + tmsApiKey;
+var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+var numMonths = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+var nowPlayingHTML = '';
+var upcomingHTML = '';
+var discoverHTML = '';
+var favoritesHTML = '';
 
-	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-	var numMonths = ['01','02','03','04','05','06','07','08','09','10','11','12'];
-
-	var nowPlayingHTML = '';
-	var upcomingHTML = '';
-	var discoverHTML = '';
-	var favoritesHTML = '';
-
+///////////////////////
+// Document Ready (jQuery)
+///////////////////////
 $(document).ready(function(){
+	// Default to Now Playing search. This is the most popular search.
 	var currentFilter = 'popular';
 	$('.main-menu a p').removeClass('active-browse');
 	$('.playing p').addClass('active-browse');
 	getNowPlaying();
-	// $('*').focus(function(){
-	// 	$('*').toggleClass('focused');
-	// });
-
+	
+	// Handling the search bar functionality.
+	// Some conditional styles, a basic UX flow and a form submit.
 	$('.fa-search').click(function(event){
 		event.preventDefault();
 		if($('.search-field').hasClass('active-search') && $('.search-field').val() !== ''){
-			// console.log($('.search-field').val())
 			$('.search-form').submit();
 		}else{
 			$('.search-field').toggleClass('hidden-search');
@@ -74,18 +75,13 @@ $(document).ready(function(){
 		searchQuery = $('.search-field').val();
 		currentPage = 1;
 		searchMoviesUrl = apiBaseUrl + '/search/movie?api_key=' + apiKey + '&query=' + searchQuery + '&region=US' + '&page=' + currentPage;
-
+		// Run the search with the current query.
 		searchMovies(searchQuery);
 
 	});
-
-
-	$('#overlay-heart').click(function(){
-		console.log("clicked")
-	});
-
-
-
+	///////////////////////
+	// Another instance where the user clicks the Now Playing option in the side menu.
+	///////////////////////
 	$('.playing').click(function(){
 		$('.main-menu a p').removeClass('active-browse');
 		$('.playing p').addClass('active-browse');
@@ -93,23 +89,21 @@ $(document).ready(function(){
 		nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
 		getNowPlaying();
 	});
-
+	///////////////////////
+	// This handles Infinite Scroll functionality.
+	///////////////////////
 	$(window).scroll(function(){
 		var newCallStart = $(document).height() - $(window).height();
 		var newCallEnd = $(document).height() - $(window).height();
-		// console.log(newCallStart)
-		// console.log($(window).scrollTop())
-		// console.log(currentFilter)
+		// Set a range to fire.
+		// And listen for the scrollTop to hit that range.
 		if($(window).scrollTop() >= newCallStart && $(window).scrollTop() <= newCallEnd){
 			currentPage += 1;
-			// console.log(currentPage);
 			nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
 			discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
 			upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
 			searchMoviesUrl = apiBaseUrl + '/search/movie?api_key=' + apiKey + '&query=' + searchQuery + '&region=US' + '&page=' + currentPage;
-			// console.log(nowPlayingUrl);
-			// console.log(currentQuery)
-			// console.log(discoverBaseUrl)
+			// Then, judge the current page and query.
 			if(currentQuery === "nowPlaying"){
 				getNowPlaying();
 			}else if(currentQuery === "discover"){
@@ -122,22 +116,24 @@ $(document).ready(function(){
 				searchMoviesUrl = apiBaseUrl + '/search/movie?api_key=' + apiKey + '&query=' + searchQuery + '&region=US' + '&page=' + currentPage;
 				searchMovies(searchQuery);
 			}
-			
 		}
 	});
-
+	///////////////////////
+	// The first Main Endpoint of the App.
+	// Basic search from the restful API.
+	///////////////////////
 	function searchMovies(searchQuery){
 		currentQuery = "searchMovies"; 
 		$('.fa-heart').removeClass('active-favorites');
 		$.getJSON(searchMoviesUrl, function(searchData){
-			// console.log(searchData)
 			currentBaseUrl = searchMoviesUrl;
+			// logic for scroll
 			if( currentPage === 1){
 				movieIDArr = [];
 				searchHTML = '';
 				$('body').scrollTop(0);
 			}
-			
+			// Loop through results and set variables to add to dynamic HTML below.
 			for(let i = 0; i < searchData.results.length; i++){
 				var title = searchData.results[i].original_title;
 				var release = searchData.results[i].release_date;
@@ -146,27 +142,29 @@ $(document).ready(function(){
 				var month = months[protoDate.getMonth(release)];
 				var year = (protoDate.getFullYear(release));
 				var poster = imageBaseUrl + '/w300' + searchData.results[i].poster_path;
-				
+				// Just in case no poster is available...
 				if (poster === 'http://image.tmdb.org/t/p/w300null'){
 					poster = placeholderImage;
 				}
 				var ratingAvg = searchData.vote_average;
 				var searchID = searchData.results[i].id;
+				// Grab any information on Saved Favorites from Local Storage.
 				var savedFavorite = localStorage.getItem('favorite');
 				if(savedFavorite == null){
 					savedFavorite = "";	
 				}
 				var savedArray = savedFavorite.split(',');
 				movieIDArr.push(searchID);
-
 				searchHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + searchID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 					searchHTML += '<img src="' + poster + '">';
 					searchHTML += '<div class="overlay">';
 						searchHTML += '<div class="movie-title">';
 							searchHTML += '<h2>' + title + '</h2>';
+							// The date is just some custom JS Date Object manipulation.
 							searchHTML += '<h4>Released: ' + month + ' ' + day + ', ' + year + '<h4>';
 						searchHTML += '</div>';
 						searchHTML += '<div id="details" class="details text-center">';
+							// A bit of conditional rendering for the heart icon for favorites.
 							for(let j = 0; j < savedArray.length; j++){
 								if(savedArray.indexOf(searchID.toString()) === -1){
 									searchHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart-o" aria-hidden="true"></i></span></p>';
@@ -176,6 +174,8 @@ $(document).ready(function(){
 									break;
 								}
 							}
+							// The stars are actually pretty fancy. Custom positioning with 2 divs on top of one another and a dynamic width set to the solid ones.
+							// Add to that an accurate tooltip and the UX works fairly well.
 							searchHTML += '<p><span id="overlay-stars">';
 								searchHTML += '<div class="star-ratings"><a href="#" data-toggle="tooltip" data-placement="top" title="' + (ratingAvg * 10) + '%">';
 									searchHTML += '<div class="star-ratings-top" style="width: ' + (ratingAvg * 10) + '%"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>';
@@ -185,28 +185,26 @@ $(document).ready(function(){
 						searchHTML += '</div>';
 					searchHTML += '</div>';
 				searchHTML += '</div>';
-
-				setTimeout(function(){
-					$('#movie-grid').html(searchHTML);
-					// $('.movie-item').addClass('view');
-				}, 200);
+				// Finally, add all the HTML to the grid for each Movie Item.
+				$('#movie-grid').html(searchHTML);
 			}
 		});
 	};
-
+	///////////////////////
+	// The rest of the functions are the same basic premise. Just different endpoints and purposes.
+	///////////////////////
+	// Here, the Now Playing includes all current movies in theaters, and I believe that includes art theaters, dollar movies, and limited runs.
+	///////////////////////
 	function getNowPlaying(){
 		currentQuery = "nowPlaying";
 		$('.fa-heart').removeClass('active-favorites');
 		$.getJSON(nowPlayingUrl, function(nowPlayingData){
-			console.log(nowPlayingData);
-			// console.log(nowPlayingUrl);
 			currentBaseUrl = nowPlayingUrl;
 			if( currentPage === 1){
 				movieIDArr = [];
 				nowPlayingHTML = '';
 				$('body').scrollTop(0);
 			}
-			
 			for(let i = 0; i < nowPlayingData.results.length; i++){
 				var title = nowPlayingData.results[i].original_title;
 				var release = nowPlayingData.results[i].release_date;
@@ -220,16 +218,12 @@ $(document).ready(function(){
 				}
 				var ratingAvg = nowPlayingData.results[i].vote_average;
 				var nowPlayingID = nowPlayingData.results[i].id;
-				// console.log(nowPlayingID)
 				var savedFavorite = localStorage.getItem('favorite');
 				if(savedFavorite == null){
 					savedFavorite = "";	
 				}
 				var savedArray = savedFavorite.split(',');
 				movieIDArr.push(nowPlayingID);
-				// addMpaaRatings();
-				// console.log(movieIDArr);
-				
 				nowPlayingHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + nowPlayingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 					nowPlayingHTML += '<img src="' + poster + '">';
 					nowPlayingHTML += '<div class="overlay">';
@@ -256,32 +250,27 @@ $(document).ready(function(){
 						nowPlayingHTML += '</div>';
 					nowPlayingHTML += '</div>';
 				nowPlayingHTML += '</div>';
-					
-				setTimeout(function(){
-					$('#movie-grid').html(nowPlayingHTML);
-					// $('.movie-item').addClass('view');
-				}, 200);
+				$('#movie-grid').html(nowPlayingHTML);
 			}			
 		});
 	};
-
-
-
+	///////////////////////
+	// This click listener does the same thing that the one for Now Playing does.
+	///////////////////////
 	$('.upcoming').click(function(){
 		currentPage = 1;
 		$('.main-menu a p').removeClass('active-browse');
 		$('.upcoming p').addClass('active-browse');
 		upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
 		getUpcoming();
-		// console.log('ok');
 	});
-
+	///////////////////////
+	// Again, the function is basically the same as well. Just pulling unreleased movies within a set date range out from today. 
+	///////////////////////
 	function getUpcoming(){
 		currentQuery = "upcoming";
 		$('.fa-heart').removeClass('active-favorites');
 		$.getJSON(upcomingBaseUrl, function(upcomingData){
-			// console.log(nowPlayingData);
-			// console.log(upcomingUrl);
 			currentBaseUrl = upcomingBaseUrl;
 			if( currentPage === 1){
 				movieIDArr = [];
@@ -308,8 +297,6 @@ $(document).ready(function(){
 				}
 				var savedArray = savedFavorite.split(',');
 				movieIDArr.push(upcomingID);
-				// console.log(movieIDArr);
-				// console.log(poster);
 				if(protoDate.getTime() > today.getTime()){
 					upcomingHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + upcomingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 						upcomingHTML += '<img src="' + poster + '">';
@@ -341,12 +328,12 @@ $(document).ready(function(){
 			}
 			$('#movie-grid').html(upcomingHTML);
 		});
-		// console.log(currentQuery)
 	};
+	///////////////////////
+	// Here is the basic logic and conditional styling for the sort options and toggles.
+	// Each can be sorted ascending, or descending, and can have a priority if active.
+	///////////////////////
 	var sortVar = $('.sortBy.Active').attr('svalD');
-
-	// $('.sortBy.Active').attr('up','false');
-
 	$('.sortBy').click(function(){
 		$('.sortBy').removeClass('Active');
 		$(this).addClass('Active');
@@ -362,7 +349,10 @@ $(document).ready(function(){
 			$('.sortBy.Active .arrowDown').toggleClass('down');
 		}
 	});
-
+	///////////////////////
+	// With the Discover endpoint, I resused the function for each one of the various genres that can be set.
+	// If the genre, (or popular) is clicked, then the special HTML attribute, lval, is passed into the call, along with the current sort value.
+	///////////////////////
 	var discoverUrl = discoverBaseUrl;
 	$('.filter').click(function(){
 		currentFilter = $(this).attr('id');
@@ -371,24 +361,19 @@ $(document).ready(function(){
 		$('#'+currentFilter+' p').addClass('active-browse');
 		currentPage = 1;
 		discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
-		// console.log(sortVar)
-		// var sortVar = $('.sortBy.Active').attr('svalA');
-		// console.log(sortVar);
 		discoverJSON(linkVar,sortVar);
 	});
-
-	// $('.sortBy').click(function(){
-	// 	currentUrl = 
-	// });
-
+	///////////////////////
+	// The function itself doesn't change too much, but the variability here is the key.
+	// (Obviously, this is a far more efficient way of calling the API and in the future, this is the first pain point I will refactor.
+	// Ugly code that is readable, and works is my MVP.)
+	///////////////////////
 	function discoverJSON(linkVar,sortVar){
 		var discoverUrl = '';
 		$('.fa-heart').removeClass('active-favorites');
 		discoverUrl = discoverBaseUrl + linkVar + sortVar;
-		// console.log(discoverUrl);
 		currentQuery = "discover";
 		$.getJSON(discoverUrl, function(discoverData){
-			// console.log(discoverData);
 			currentBaseUrl = discoverUrl;
 			if( currentPage === 1){
 				movieIDArr = [];
@@ -396,18 +381,14 @@ $(document).ready(function(){
 				discoverHTML = '';
 				$('body').scrollTop(0);
 			}
-			
 			for(let i = 0; i < discoverData.results.length; i++){
 				var title = discoverData.results[i].original_title;
 				var release = discoverData.results[i].release_date;
 				var protoDate = new Date(release);
-
 				var day = (protoDate.getDate(release)+1);
 				var month = months[protoDate.getMonth(release)];
 				var year = (protoDate.getFullYear(release));
-				// console.log(release[0]);
 				var poster = imageBaseUrl + '/w300' + discoverData.results[i].poster_path;
-				// console.log(poster)
 				if (poster === 'http://image.tmdb.org/t/p/w300null'){
 					poster = placeholderImage;
 				}
@@ -419,7 +400,6 @@ $(document).ready(function(){
 				}
 				var savedArray = savedFavorite.split(',');
 				movieIDArr.push(discoverID);
-
 				discoverHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + discoverID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 					discoverHTML += '<img src="' + poster + '">';
 					discoverHTML += '<div class="overlay">';
@@ -448,37 +428,36 @@ $(document).ready(function(){
 				discoverHTML += '</div>';
 			}
 			$('#movie-grid').html(discoverHTML);
-			// console.log(movieIDArr);
 		});
-		// console.log(currentQuery)
 	};
-
+	///////////////////////
+	// Here is the basic listener for the main menu. Click the tabe and the menu slides into place.
+	///////////////////////
 	$('.main-menu-tab').click(function(){
 		animateMenu();
 	});
-
+	///////////////////////
+	// Also, here is the listener for the favorites button on the top bar.
+	// This one is a bit more interesting, since it pulls the array of favorites from local storage first, and then runs a new call for each favorite.
+	///////////////////////
 	$('.favorites-button').click(function(){
 		favoritesHTML = '';
 		currentQuery = 'favorites';
 		$('.main-menu a p').removeClass('active-browse');
 		$('.fa.fa-heart').addClass('active-favorites');
 		$('#movie-grid').html(favoritesHTML);
-		// console.log(localStorage.favorite)
 		var favStr = localStorage.favorite;
 		var favArray = favStr.split(',');
-		// console.log(favArray)
 		for(let i=0; i<favArray.length; i++){
 			showFavorites(favArray[i]);
 		}
-		
 	});
-
-	
-
+	///////////////////////
+	// The basic function is the same as usual, but it does take the id passed from the favorites array.
+	///////////////////////
 	function showFavorites(favorite){
 		var favoritesUrl = apiBaseUrl + '/movie/' + favorite + '?api_key=' + apiKey;
 		$.getJSON(favoritesUrl, function(favoritesData){
-			// console.log(favoritesData)
 			var title = favoritesData.original_title;
 			var release = favoritesData.release_date;
 			var protoDate = new Date(release);
@@ -524,120 +503,24 @@ $(document).ready(function(){
 			$('#movie-grid').html(favoritesHTML);
 		});
 	}
-});
-
-
-
-// $('#heart').removeClass();
-// // $('#main-content').html(backdropHTML);
-// $('#movie-poster').html(posterHTML);
-// $('.modal-movie-title').html(titleHTML);
-// $('#trailer').html(infoHTML);
-// $('#trailer-content').html(trailerHTML);
-// $('#movie-rating').html(ratingHTML);
-// $('.tickets').html(ticketsHTML);
-// $('[data-toggle="tooltip"]').tooltip();
-// $('#heart').click(function(){
-// 	$('#heart').toggleClass('fa fa-heart');
-// 	$('#heart').toggleClass('fa fa-heart-o');
-// 	var favArray = [];
-// 	var old = localStorage.getItem('favorite');
-// 	// console.log(old);
-// 	// console.log(currentID);
-	
-//     if(old === null){
-//     	localStorage.setItem('favorite', currentID);
-//     	old = localStorage.getItem('favorite');
-//     	favArray.push(old);
-//     	// console.log(favArray);
-//     }else if(old === currentID){
-//     	localStorage.removeItem('favorite');
-//     	// console.log(favArray);
-//     }else{
-//     	favArray = old.split(',');
-//     	// console.log(favArray);
-    	
-//     	for(let i = 0; i < favArray.length; i++){
-// 			// console.log(favArray[i]);
-// 			if(favArray[i] == currentID){
-// 				removeFromStorage('favorite', currentID);
-// 				// console.log('I was removed');
-// 				break;
-// 			}else if(favArray.indexOf(currentID, 0) === -1){
-// 				// console.log('I need to be added');
-// 				appendToStorage('favorite', currentID);
-// 				break;
-// 			}
-// 		}
-//     }
-	
-
-// 	function appendToStorage(name, data){ 
-// 		// console.log(old);
-// 	    localStorage.setItem(name, old + ',' + data);
-// 	}
-// 	function removeFromStorage(name, data){
-// 	    // console.log(favArray);
-// 	    for(let i = 0; i < favArray.length; i++){
-// 	    	if(favArray[i] == currentID){
-// 	    		favArray.splice(i,1);
-// 	    	}
-// 	    }
-// 	    var favString = favArray.join();
-// 	    localStorage.setItem('favorite', favString);
-// 	    if(currentQuery === 'favorites'){
-// 		    favoritesHTML = '';
-// 			$('#movie-grid').html(favoritesHTML);
-// 			var favArr = favString.split(',');
-// 			// console.log(favArr)
-// 			for(let i=0; i<favArr.length; i++){
-// 				updateFavorites(favArr[i]);
-// 			}
-// 		}
-// 	}
-// 	function updateFavorites(favorite){
-// 		var favoritesUrl = apiBaseUrl + '/movie/' + favorite + '?api_key=' + apiKey;
-// 		$.getJSON(favoritesUrl, function(favoritesData){
-// 			// console.log(favoritesData)
-// 			var title = favoritesData.original_title;
-// 			var release = favoritesData.release_date;
-// 			var protoDate = new Date(release);
-// 			var day = (protoDate.getDate(release)+1);
-// 			var month = months[protoDate.getMonth(release)];
-// 			var year = (protoDate.getFullYear(release));
-// 			var poster = imageBaseUrl + '/w300' + favoritesData.poster_path;
-// 			if (poster === 'http://image.tmdb.org/t/p/w300null'){
-// 				poster = placeholderImage;
-// 			}
-// 			favoritesHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + favorite + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
-// 				favoritesHTML += '<img src="' + poster + '">';
-// 				favoritesHTML += '<div class="overlay">';
-// 					favoritesHTML += '<div class="movie-title">';
-// 						favoritesHTML += '<h2>' + title + '</h2>';
-// 						favoritesHTML += '<h4>' + month + ' ' + year + '<h4>';
-// 					favoritesHTML += '</div>';
-// 					favoritesHTML += '<div class="movie-rating text-center">';
-// 						favoritesHTML += '';
-// 					favoritesHTML += '</div>';
-// 				favoritesHTML += '</div>';
-// 			favoritesHTML += '</div>';
-// 			$('#movie-grid').html(favoritesHTML);
-// 		});
-// 	}			
-// });
-
+}); // <==== End of Document ready. 
+// I had to play with what worked in an out of the main ready function, but this is currenly working, so good enough for now. Added to ToDo for version 2!
+///////////////////////
+// Here is the function to animate the menu. Just fancy css classes.
+///////////////////////
 function animateMenu(){
 	$('.main-menu').toggleClass('active');
 	$('.main-menu-tab').toggleClass('active');
 }
-
+///////////////////////
+// This is the big bad Modal Updater! This thing just gets bigger and bigger as I work on it.
+// It takes the current ID from the clicked movie tile, and runs a full search with additional items appended to it.
+// All this comes back and I grab what I want for the render.
+///////////////////////
 function updateModal(thisMovie){
-	// console.log(thisMovie);
 	currentID = 0;
 	currentID = $(thisMovie).attr('id');
-	// console.log(currentID);
 	var currentUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey +'&append_to_response=videos,images,release_dates';
-
 	var posterHTML = '';
 	var titleHTML = '';
 	var infoHTML = '';
@@ -645,17 +528,12 @@ function updateModal(thisMovie){
 	var backdropHTML = '';
 	var ticketsHTML = '';
 	var trailerHTML = '';
-	// console.log(currentUrl);
-
-	$.getJSON(currentUrl, function(detailsData){
-		// console.log(detailsData);
-		
+	// reseting some variables...
+	$.getJSON(currentUrl, function(detailsData){		
 		var zip = 30075;
 		var title = detailsData.original_title;
 		var release = detailsData.release_date;
 		var protoDate = new Date(release);
-		
-		
 		var day = (protoDate.getDate(release)+1);
 		var month = months[protoDate.getMonth(release)];
 		var year = protoDate.getFullYear(release);
@@ -663,10 +541,12 @@ function updateModal(thisMovie){
 		if (poster === 'http://image.tmdb.org/t/p/w300null'){
 			poster = placeholderImage;
 		}
+		// Add backdrops to rotate...
 		var backdrop = imageBaseUrl + '/w600' + detailsData.backdrop_path;
 		var description = detailsData.overview;
 		var runTime = detailsData.runtime;
 		var webSite = detailsData.homepage;
+		// Just in case there are no trailers...
 		if (detailsData.videos.results.length > 0){
 			var trailerId = detailsData.videos.results[0].key;
 		}else{
@@ -679,14 +559,12 @@ function updateModal(thisMovie){
 		var currentRootId = '';
 		var currentTmsId = '';
 		var mpaaRating = currentMpaa;
-		// addMpaaRatings();
-
+		// Grabbed MPAA ratings from a country and cirtificates object in release_dates (appended to the URL).
 		const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + zip + '&api_key=' + tmsApiKey;
-		
 		$('#main-content').html('');
-		
 	 	var releaseResults = detailsData.release_dates.results;
         var mpaa = 'NR';
+        // There were results for multiple countries and regions, so there were more than just MPAA ratings...
         for (let result of releaseResults) {
             if (result.iso_3166_1 === "US") {
                 var certifications = result.release_dates;
@@ -698,9 +576,7 @@ function updateModal(thisMovie){
                 }
             }
         }
-
-		
-
+        // Grabbed all available genres.
 		for(let i = 0; i < detailsData.genres.length; i++){
 			genre = detailsData.genres[i].name;
 			genreArray.push(genre);
@@ -708,17 +584,8 @@ function updateModal(thisMovie){
 		for(let i = 0; i < genreArray.length; i++){
 			var visGenre = genreArray.join(', ');
 		}
-		
-		// console.log(detailsData);
-		// console.log(visGenre);
-		// currentID = movieIDArr[this];
-		
-		
+		// Setup a rotating backdrop with the gallery images. 
 		var backdropCounter = 0;
-
-
-		
-		
 		var backdropRotate = setInterval(function(){
 			$('#main-content').html('');
 			backdrop = imageBaseUrl + '/w600' + detailsData.images.backdrops[backdropCounter].file_path;
@@ -728,15 +595,13 @@ function updateModal(thisMovie){
 				backdropCounter = 0;
 			}
 		}, 10000);
-		
+		// Had to stop the backdrop rotation and clear the content on close of the modal.
 		$('.close, .modal-backdrop').click(function stopRotate(){
 			clearInterval(backdropRotate);
 			$('#main-content').html('');
 		});
-
-		
+		// More custom HTML to setup the layout and get the content I wanted.
 		posterHTML += '<img src="' + poster + '">';
-
 		titleHTML += '<h1 id="title-text">' + title + ' <divƒ id="mpaaRating">' + mpaa + '</div></h1>';
 		titleHTML += '<hr/>';
 		titleHTML += '<p id="desc">' + description + '</p>';
@@ -760,37 +625,31 @@ function updateModal(thisMovie){
 				ratingHTML += ' &nbsp; &nbsp; (' + ratingCount + ' reviews) &nbsp; | &nbsp; Favorite: <i id="heart" class="fa fa-heart-o" aria-hidden="true"></i>';
 			ratingHTML += '</div>';
 		ratingHTML += '</div>';
-		// console.log(protoDate.getTime());
-		// console.log(Date.now() - 3888000000);
 		if(protoDate.getTime() > (Date.now() - 3888000000)){
 			ticketsHTML += '<div class="col-sm-4 text-center">';
 				ticketsHTML += '<a href="http://www.fandango.com/moviesintheaters" target="_blank" id="tickets-button" class="btn btn-lg btn-primary"><img width="30px" src="fandango-icon.png"> Get Tickets</a>';
 			ticketsHTML += '</div>';
 		}
-
+		// This added a new sub-modal on top of the main modal for the trailer video player.
 		trailerHTML += '<iframe id="player" src="" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>';
 
-
+		// Saved local storage settings for the favorite button.
 		var savedFavorite = localStorage.getItem('favorite');
-		// console.log(savedFavorite);
 		if(savedFavorite == null){
 			savedFavorite = "";	
 		}
-		// console.log(savedFavorite);
 		var savedArray = savedFavorite.split(',');
-		// console.log(savedArray);
+		// Listener for favorite. If it is in the array, this movie will load as a favorite.
 		$('#heart').ready(function(){
 			for(let i = 0; i < savedArray.length; i++){
 				if(savedArray[i] == currentID){
-					// console.log(savedArray[i]);
 					$('#heart').removeClass();
 					$('#heart').addClass('fa fa-heart');
 				}
 			}
 		});
-		
+		// Final rendering of all sub components.
 		$('#heart').removeClass();
-		// $('#main-content').html(backdropHTML);
 		$('#movie-poster').html(posterHTML);
 		$('.modal-movie-title').html(titleHTML);
 		$('#trailer').html(infoHTML);
@@ -798,47 +657,42 @@ function updateModal(thisMovie){
 		$('#movie-rating').html(ratingHTML);
 		$('.tickets').html(ticketsHTML);
 		$('[data-toggle="tooltip"]').tooltip();
+		///////////////////////
+		// This is the favorite click listener function. 
+		// If it is already a favorite, remove the id and save to local storage.
+		// Else, add the append to the array and save that to local storage.
+		///////////////////////
 		$('#heart').click(function(){
 			$('#heart').toggleClass('fa fa-heart');
 			$('#heart').toggleClass('fa fa-heart-o');
 			var favArray = [];
 			var old = localStorage.getItem('favorite');
-			// console.log(old);
-			// console.log(currentID);
-			
+			// Setting base cases, and making sure it isn't null.
 		    if(old === null){
 		    	localStorage.setItem('favorite', currentID);
 		    	old = localStorage.getItem('favorite');
 		    	favArray.push(old);
-		    	// console.log(favArray);
 		    }else if(old === currentID){
 		    	localStorage.removeItem('favorite');
-		    	// console.log(favArray);
 		    }else{
 		    	favArray = old.split(',');
-		    	// console.log(favArray);
-		    	
 		    	for(let i = 0; i < favArray.length; i++){
-					// console.log(favArray[i]);
 					if(favArray[i] == currentID){
 						removeFromStorage('favorite', currentID);
-						// console.log('I was removed');
 						break;
 					}else if(favArray.indexOf(currentID, 0) === -1){
-						// console.log('I need to be added');
 						appendToStorage('favorite', currentID);
 						break;
 					}
 				}
 		    }
-			
-
+		    ///////////////////////
+		    // Helper functions to append or remove the item.
+		    ///////////////////////
 			function appendToStorage(name, data){ 
-				// console.log(old);
 			    localStorage.setItem(name, old + ',' + data);
 			}
 			function removeFromStorage(name, data){
-			    // console.log(favArray);
 			    for(let i = 0; i < favArray.length; i++){
 			    	if(favArray[i] == currentID){
 			    		favArray.splice(i,1);
@@ -850,16 +704,21 @@ function updateModal(thisMovie){
 				    favoritesHTML = '';
 					$('#movie-grid').html(favoritesHTML);
 					var favArr = favString.split(',');
-					// console.log(favArr)
 					for(let i=0; i<favArr.length; i++){
 						updateFavorites(favArr[i]);
+						///////////////////////
+						// At the end, if you are on the favorites page and you just dropped the favorite, it should be gone immediately.
+						// Just a very verbose way to keep nice UX...
+						///////////////////////
 					}
 				}
 			}
+			///////////////////////
+			// Here is the forced re-render of the favorites page, so there will be no doubt if these need to be updated.
+			///////////////////////
 			function updateFavorites(favorite){
 				var favoritesUrl = apiBaseUrl + '/movie/' + favorite + '?api_key=' + apiKey;
 				$.getJSON(favoritesUrl, function(favoritesData){
-					// console.log(favoritesData)
 					var title = favoritesData.original_title;
 					var release = favoritesData.release_date;
 					var protoDate = new Date(release);
@@ -906,7 +765,10 @@ function updateModal(thisMovie){
 				});
 			}			
 		});
-
+		///////////////////////
+		// Finally, here is the autoplay for the trailer modal. I wanted to autoplay, be available to change settings, or make fullscreen, and still be able to stop on close...
+		// Really tough with the YouTube iFrame API, but it worked in the end!
+		///////////////////////
 		function autoPlayYouTubeModal(){
 			var trigger = $(".modal-body").find('[data-toggle="modal"]');
 			trigger.click(function() {
@@ -922,8 +784,7 @@ function updateModal(thisMovie){
 		autoPlayYouTubeModal();
 	});
 }
-
-
-
-
-
+///////////////////////
+// The End
+// Thanks for reading! If you have any comments or suggestions, let me know at andytuttle.io, GitHub, or LinkedIn!
+///////////////////////
