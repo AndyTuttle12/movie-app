@@ -328,7 +328,7 @@ div.search-area{
 .overlay{  
 	position: absolute;
 	margin-top: -450px;
-	background:rgba(255,255,255,.75);
+	background:rgba(255,255,255,.8);
    	text-align:center;
    	height: 100vh;
    	width: 300px;
@@ -338,7 +338,7 @@ div.search-area{
 }
 
 .movie-item:hover .overlay{
-	opacity: .75;
+	opacity: 1;
 }
 
 .movie-item:hover .overlay .movie-title{
@@ -356,16 +356,16 @@ div.search-area{
 #details #overlay-heart .fa{
 	transition: all .2s;
 	font-weight: bold;
-}
-
-#details #overlay-heart .fa:hover{
-	transition: all .2s;
+	position: relative;
+	z-index: 999;
 	color: red;
+	opacity: 1;
 }
 
 #details .star-ratings{
 	font-size: 30px;
 	width: 150px;
+	opacity: 1;
 }
 
 #details .star-ratings span{

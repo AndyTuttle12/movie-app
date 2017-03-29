@@ -80,6 +80,11 @@ $(document).ready(function(){
 	});
 
 
+	$('#overlay-heart').click(function(){
+		console.log("clicked")
+	});
+
+
 
 	$('.playing').click(function(){
 		$('.main-menu a p').removeClass('active-browse');
@@ -145,7 +150,13 @@ $(document).ready(function(){
 				if (poster === 'http://image.tmdb.org/t/p/w300null'){
 					poster = placeholderImage;
 				}
+				var ratingAvg = searchData.vote_average;
 				var searchID = searchData.results[i].id;
+				var savedFavorite = localStorage.getItem('favorite');
+				if(savedFavorite == null){
+					savedFavorite = "";	
+				}
+				var savedArray = savedFavorite.split(',');
 				movieIDArr.push(searchID);
 
 				searchHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + searchID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
@@ -155,8 +166,22 @@ $(document).ready(function(){
 							searchHTML += '<h2>' + title + '</h2>';
 							searchHTML += '<h4>Released: ' + month + ' ' + day + ', ' + year + '<h4>';
 						searchHTML += '</div>';
-						searchHTML += '<div class="movie-rating text-center">';
-							searchHTML += '';
+						searchHTML += '<div id="details" class="details text-center">';
+							for(let j = 0; j < savedArray.length; j++){
+								if(savedArray.indexOf(searchID.toString()) === -1){
+									searchHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart-o" aria-hidden="true"></i></span></p>';
+									break;
+								}else{
+									searchHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart" aria-hidden="true"></i></span></p>';
+									break;
+								}
+							}
+							searchHTML += '<p><span id="overlay-stars">';
+								searchHTML += '<div class="star-ratings"><a href="#" data-toggle="tooltip" data-placement="top" title="' + (ratingAvg * 10) + '%">';
+									searchHTML += '<div class="star-ratings-top" style="width: ' + (ratingAvg * 10) + '%"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>';
+									searchHTML += '<div class="star-ratings-bottom"><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span></div>';
+								searchHTML += '</a></div>';
+							searchHTML += '</span></p>';
 						searchHTML += '</div>';
 					searchHTML += '</div>';
 				searchHTML += '</div>';
@@ -204,31 +229,33 @@ $(document).ready(function(){
 				movieIDArr.push(nowPlayingID);
 				// addMpaaRatings();
 				// console.log(movieIDArr);
-				for(let j = 0; j < savedArray.length; j++){
-					console.log(nowPlayingID)
-					nowPlayingHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + nowPlayingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
-						nowPlayingHTML += '<img src="' + poster + '">';
-						nowPlayingHTML += '<div class="overlay">';
-							nowPlayingHTML += '<div class="movie-title">';
-								nowPlayingHTML += '<h2>' + title + '</h2>';
-								nowPlayingHTML += '<h4>Released: ' + month + ' ' + day + ', ' + year + '<h4>';
-							nowPlayingHTML += '</div>';
-							nowPlayingHTML += '<div id="details" class="details text-center">';
-								if(savedArray[j] == nowPlayingID){
-									nowPlayingHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart" aria-hidden="true"></i></span></p>';
-								}else{
+				
+				nowPlayingHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + nowPlayingID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
+					nowPlayingHTML += '<img src="' + poster + '">';
+					nowPlayingHTML += '<div class="overlay">';
+						nowPlayingHTML += '<div class="movie-title">';
+							nowPlayingHTML += '<h2>' + title + '</h2>';
+							nowPlayingHTML += '<h4>Released: ' + month + ' ' + day + ', ' + year + '<h4>';
+						nowPlayingHTML += '</div>';
+						nowPlayingHTML += '<div id="details" class="details text-center">';
+							for(let j = 0; j < savedArray.length; j++){
+								if(savedArray.indexOf(nowPlayingID.toString()) === -1){
 									nowPlayingHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart-o" aria-hidden="true"></i></span></p>';
+									break;
+								}else{
+									nowPlayingHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart" aria-hidden="true"></i></span></p>';
+									break;
 								}
-								nowPlayingHTML += '<p><span id="overlay-stars">';
-									nowPlayingHTML += '<div class="star-ratings"><a href="#" data-toggle="tooltip" data-placement="top" title="' + (ratingAvg * 10) + '%">';
-										nowPlayingHTML += '<div class="star-ratings-top" style="width: ' + (ratingAvg * 10) + '%"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>';
-										nowPlayingHTML += '<div class="star-ratings-bottom"><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span></div>';
-									nowPlayingHTML += '</a></div>';
-								nowPlayingHTML += '</span></p>';
-							nowPlayingHTML += '</div>';
+							}
+							nowPlayingHTML += '<p><span id="overlay-stars">';
+								nowPlayingHTML += '<div class="star-ratings"><a href="#" data-toggle="tooltip" data-placement="top" title="' + (ratingAvg * 10) + '%">';
+									nowPlayingHTML += '<div class="star-ratings-top" style="width: ' + (ratingAvg * 10) + '%"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>';
+									nowPlayingHTML += '<div class="star-ratings-bottom"><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span></div>';
+								nowPlayingHTML += '</a></div>';
+							nowPlayingHTML += '</span></p>';
 						nowPlayingHTML += '</div>';
 					nowPlayingHTML += '</div>';
-				}
+				nowPlayingHTML += '</div>';
 					
 				setTimeout(function(){
 					$('#movie-grid').html(nowPlayingHTML);
@@ -273,8 +300,13 @@ $(document).ready(function(){
 				if (poster === 'http://image.tmdb.org/t/p/w300null'){
 					poster = placeholderImage;
 				}
+				var ratingAvg = upcomingData.results[i].vote_average;
 				var upcomingID = upcomingData.results[i].id;
-				// addMpaaRatings();
+				var savedFavorite = localStorage.getItem('favorite');
+				if(savedFavorite == null){
+					savedFavorite = "";	
+				}
+				var savedArray = savedFavorite.split(',');
 				movieIDArr.push(upcomingID);
 				// console.log(movieIDArr);
 				// console.log(poster);
@@ -286,9 +318,23 @@ $(document).ready(function(){
 								upcomingHTML += '<h2>' + title + '</h2>';
 								upcomingHTML += '<h4>Release Date: ' + month + ' ' + day + ', ' + year + '<h4>';
 							upcomingHTML += '</div>';
-							upcomingHTML += '<div class="movie-rating text-center">';
-								upcomingHTML += '';
-							upcomingHTML += '</div>';
+							upcomingHTML += '<div id="details" class="details text-center">';
+							for(let j = 0; j < savedArray.length; j++){
+								if(savedArray.indexOf(upcomingID.toString()) === -1){
+									upcomingHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart-o" aria-hidden="true"></i></span></p>';
+									break;
+								}else{
+									upcomingHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart" aria-hidden="true"></i></span></p>';
+									break;
+								}
+							}
+							upcomingHTML += '<p><span id="overlay-stars">';
+								upcomingHTML += '<div class="star-ratings"><a href="#" data-toggle="tooltip" data-placement="top" title="' + (ratingAvg * 10) + '%">';
+									upcomingHTML += '<div class="star-ratings-top" style="width: ' + (ratingAvg * 10) + '%"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>';
+									upcomingHTML += '<div class="star-ratings-bottom"><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span></div>';
+								upcomingHTML += '</a></div>';
+							upcomingHTML += '</span></p>';
+						upcomingHTML += '</div>';
 						upcomingHTML += '</div>';
 					upcomingHTML += '</div>';
 				}
@@ -365,8 +411,13 @@ $(document).ready(function(){
 				if (poster === 'http://image.tmdb.org/t/p/w300null'){
 					poster = placeholderImage;
 				}
+				var ratingAvg = discoverData.results[i].vote_average;
 				var discoverID = discoverData.results[i].id;
-				// addMpaaRatings();
+				var savedFavorite = localStorage.getItem('favorite');
+				if(savedFavorite == null){
+					savedFavorite = "";	
+				}
+				var savedArray = savedFavorite.split(',');
 				movieIDArr.push(discoverID);
 
 				discoverHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + discoverID + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
@@ -376,8 +427,22 @@ $(document).ready(function(){
 							discoverHTML += '<h2>' + title + '</h2>';
 							discoverHTML += '<h4>' + month + ' ' + year + '<h4>';
 						discoverHTML += '</div>';
-						discoverHTML += '<div class="movie-rating text-center">';
-							discoverHTML += '';
+						discoverHTML += '<div id="details" class="details text-center">';
+							for(let j = 0; j < savedArray.length; j++){
+								if(savedArray.indexOf(discoverID.toString()) === -1){
+									discoverHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart-o" aria-hidden="true"></i></span></p>';
+									break;
+								}else{
+									discoverHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart" aria-hidden="true"></i></span></p>';
+									break;
+								}
+							}
+							discoverHTML += '<p><span id="overlay-stars">';
+								discoverHTML += '<div class="star-ratings"><a href="#" data-toggle="tooltip" data-placement="top" title="' + (ratingAvg * 10) + '%">';
+									discoverHTML += '<div class="star-ratings-top" style="width: ' + (ratingAvg * 10) + '%"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>';
+									discoverHTML += '<div class="star-ratings-bottom"><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span></div>';
+								discoverHTML += '</a></div>';
+							discoverHTML += '</span></p>';
 						discoverHTML += '</div>';
 					discoverHTML += '</div>';
 				discoverHTML += '</div>';
@@ -424,6 +489,12 @@ $(document).ready(function(){
 			if (poster === 'http://image.tmdb.org/t/p/w300null'){
 				poster = placeholderImage;
 			}
+			var ratingAvg = favoritesData.vote_average;
+			var savedFavorite = localStorage.getItem('favorite');
+			if(savedFavorite == null){
+				savedFavorite = "";	
+			}
+			var savedArray = savedFavorite.split(',');
 			favoritesHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + favorite + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 				favoritesHTML += '<img src="' + poster + '">';
 				favoritesHTML += '<div class="overlay">';
@@ -431,9 +502,23 @@ $(document).ready(function(){
 						favoritesHTML += '<h2>' + title + '</h2>';
 						favoritesHTML += '<h4>' + month + ' ' + year + '<h4>';
 					favoritesHTML += '</div>';
-					favoritesHTML += '<div class="movie-rating text-center">';
-						favoritesHTML += '';
-					favoritesHTML += '</div>';
+					favoritesHTML += '<div id="details" class="details text-center">';
+							for(let j = 0; j < savedArray.length; j++){
+								if(savedArray.indexOf(favorite.toString()) === -1){
+									favoritesHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart-o" aria-hidden="true"></i></span></p>';
+									break;
+								}else{
+									favoritesHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart" aria-hidden="true"></i></span></p>';
+									break;
+								}
+							}
+							favoritesHTML += '<p><span id="overlay-stars">';
+								favoritesHTML += '<div class="star-ratings"><a href="#" data-toggle="tooltip" data-placement="top" title="' + (ratingAvg * 10) + '%">';
+									favoritesHTML += '<div class="star-ratings-top" style="width: ' + (ratingAvg * 10) + '%"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>';
+									favoritesHTML += '<div class="star-ratings-bottom"><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span></div>';
+								favoritesHTML += '</a></div>';
+							favoritesHTML += '</span></p>';
+						favoritesHTML += '</div>';
 				favoritesHTML += '</div>';
 			favoritesHTML += '</div>';
 			$('#movie-grid').html(favoritesHTML);
@@ -785,6 +870,12 @@ function updateModal(thisMovie){
 					if (poster === 'http://image.tmdb.org/t/p/w300null'){
 						poster = placeholderImage;
 					}
+					var ratingAvg = favoritesData.vote_average;
+					var savedFavorite = localStorage.getItem('favorite');
+					if(savedFavorite == null){
+						savedFavorite = "";	
+					}
+					var savedArray = savedFavorite.split(',');
 					favoritesHTML += '<div class="movie-item col-sm-6 col-md-4 col-lg-3" id="' + favorite + '" data-toggle="modal" data-target=".movie-modal" onclick="updateModal(this);">';
 						favoritesHTML += '<img src="' + poster + '">';
 						favoritesHTML += '<div class="overlay">';
@@ -792,9 +883,23 @@ function updateModal(thisMovie){
 								favoritesHTML += '<h2>' + title + '</h2>';
 								favoritesHTML += '<h4>' + month + ' ' + year + '<h4>';
 							favoritesHTML += '</div>';
-							favoritesHTML += '<div class="movie-rating text-center">';
-								favoritesHTML += '';
-							favoritesHTML += '</div>';
+							favoritesHTML += '<div id="details" class="details text-center">';
+							for(let j = 0; j < savedArray.length; j++){
+								if(savedArray.indexOf(favorite.toString()) === -1){
+									favoritesHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart-o" aria-hidden="true"></i></span></p>';
+									break;
+								}else{
+									favoritesHTML += '<p><span id="overlay-heart"><i class="fa fa-3x fa-heart" aria-hidden="true"></i></span></p>';
+									break;
+								}
+							}
+							favoritesHTML += '<p><span id="overlay-stars">';
+								favoritesHTML += '<div class="star-ratings"><a href="#" data-toggle="tooltip" data-placement="top" title="' + (ratingAvg * 10) + '%">';
+									favoritesHTML += '<div class="star-ratings-top" style="width: ' + (ratingAvg * 10) + '%"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div>';
+									favoritesHTML += '<div class="star-ratings-bottom"><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span><span>&#9734;</span></div>';
+								favoritesHTML += '</a></div>';
+							favoritesHTML += '</span></p>';
+						favoritesHTML += '</div>';
 						favoritesHTML += '</div>';
 					favoritesHTML += '</div>';
 					$('#movie-grid').html(favoritesHTML);
