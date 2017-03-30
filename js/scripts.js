@@ -610,6 +610,11 @@ function updateModal(thisMovie){
 		infoHTML += '<p>';
 			infoHTML += '<span id="web-site"><a href="' + webSite + '" target="_blank">Visit the Website Here</a></span>';
 			infoHTML += '<span id="trailer-btn" class="btn btn-secondary"><a id="trailer-link" href="#" data-toggle="modal" data-target=".trailer-modal"  data-theVideo="https://www.youtube.com/embed/' + trailerId + '">View the trailer</a></span>';
+			if(protoDate.getTime() > (Date.now() - 3888000000)){
+				ticketsHTML += '<div class="text-center">';
+					ticketsHTML += '<a href="http://www.fandango.com/moviesintheaters" target="_blank" id="tickets-button" class="btn btn-lg btn-primary"><img width="30px" src="fandango-icon.png"> Get Tickets</a>';
+				ticketsHTML += '</div>';
+			}
 		infoHTML += '</p>';
 		}
 		ratingHTML += '<div>';
@@ -621,11 +626,7 @@ function updateModal(thisMovie){
 				ratingHTML += ' &nbsp; &nbsp; (' + ratingCount + ' reviews) &nbsp; | &nbsp; Favorite: <i id="heart" class="fa fa-heart-o" aria-hidden="true"></i>';
 			ratingHTML += '</div>';
 		ratingHTML += '</div>';
-		if(protoDate.getTime() > (Date.now() - 3888000000)){
-			ticketsHTML += '<div class="col-sm-4 text-center">';
-				ticketsHTML += '<a href="http://www.fandango.com/moviesintheaters" target="_blank" id="tickets-button" class="btn btn-lg btn-primary"><img width="30px" src="fandango-icon.png"> Get Tickets</a>';
-			ticketsHTML += '</div>';
-		}
+		
 		// This added a new sub-modal on top of the main modal for the trailer video player.
 		trailerHTML += '<iframe id="player" src="" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>';
 

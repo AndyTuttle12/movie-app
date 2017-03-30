@@ -10,10 +10,6 @@
 	outline-style: none;
 }
 
-.focused{
-	border: 1px solid aqua;
-}
-
 body{
 	background-color: #444;
 }
@@ -24,7 +20,7 @@ body{
 }
 
 .container{
-	max-width: 1206px;
+	max-width: 1208px;
 	width: 100%;
 	margin: auto;
 	overflow: hidden;
@@ -36,7 +32,8 @@ body{
 }
 
 .row{
-	width: 1208px;
+	width: 100%;
+	max-width: 1208px;
 	margin: auto;
 	padding: 0 -2px;
 	overflow: hidden;
@@ -51,7 +48,9 @@ body{
 
 #header{
 	position: fixed;
-	width: 1206px;
+	width: 100%;
+	padding: 0;
+	max-width: 1206px;
 	z-index: 5;
 	height: 60px;
 	margin: 0 0 60px 0;
@@ -65,6 +64,7 @@ body{
 #left-header{
 	float: left;
 	height: 30px;
+	padding: 0;
 }
 
 #right-header{
@@ -292,15 +292,16 @@ div.search-area{
 
 /* Grid Styles */
 .movie-grid{
-	margin: 60px;
-	height: 100vh;
-	width: 100%;
+	margin: 0px;
+	height: 100%;
+	width: auto;
 }
 
 .movie-item{
 	padding: 0;
-	width: 300px;
-	height: 450px;
+	width: auto;
+	height: auto;
+	min-height: 450px;
 	margin: 2px 2px 2px 0px;
 	background-size: cover;
 	background-color: #111;
@@ -419,7 +420,8 @@ div.search-area{
 
 /* Main Modal Styles */
 .movie-modal .modal-dialog{
-	width: 72%;
+	width: 100%;
+	max-width: 1208px;
 	height: 100%;
 	margin: 60px auto 0px;
 	background-color: transparent;
@@ -543,15 +545,18 @@ div.search-area{
 }
 
 #trailer{
+	clear: left;
 	float: left;
+	text-align: center;
 }
 
 #trailer-btn{
-	width: 35%;
+	width: auto;
 	height: 30px;
 	font-size: 16px;
 	line-height: 16px;
 	margin: auto;
+	margin-top: 10px;
 	margin-left: 102px;
 	text-align: center;
 	background-color: #ddd;
@@ -569,7 +574,7 @@ div.search-area{
 /* Ratings and Favorites Styles */
 #movie-rating{
 	float: right;
-	margin-right: 120px;
+	margin-right: 20px;
 	font-size: 18px;
 }
 
@@ -646,8 +651,14 @@ div.search-area{
 }
 
 /* Ticket Styles */
+.tickets{
+	float: left;
+	clear: left;
+}
+
 #tickets-button{
-	margin-left: -30px;
+	margin-left: -70px;
+	margin-bottom: 10px;
 }
 
 /* Ratings ToolTip */
@@ -664,3 +675,31 @@ div.search-area{
   	margin-right: -130px;
   	border: solid 1px #333;
 }
+
+/* Mobile Media Query */
+@media only screen and (max-width: 499px) {
+	.App{
+		width: 100vw;
+		height: 100vh;
+	}
+	.movie-item{
+		float: right;
+	}
+}
+
+/* Tablet Media Query */
+@media only screen and (min-width: 500px) and (max-width: 999px) {
+	.App{
+		width: 80vw;
+		height: 100vh;
+	}
+}
+
+/* Desktop Media Query 	*/
+@media only screen and (min-width: 1000px) {
+	.App{
+		width: 70vw;
+		height: 100vh;
+	}
+}
+
