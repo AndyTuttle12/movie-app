@@ -216,7 +216,7 @@ Holy Screen Shots Batman!
 
 ## Live Demo
 Take me out for a spin!
-(coming soon)
+[Demo](http://andytuttle.io/movie-time/)
 
 ---
 
