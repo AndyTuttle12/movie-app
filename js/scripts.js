@@ -4,7 +4,6 @@
 ///////////////////////
 var apiBaseUrl = 'http://api.themoviedb.org/3';
 var imageBaseUrl = 'http://image.tmdb.org/t/p';
-var tmsBaseUrl = 'http://data.tmsapi.com/v1.1';
 var currentBaseUrl = '';
 var placeholderImage = './placeholder.jpg';
 var currentPage = 1;
@@ -23,7 +22,6 @@ var searchMoviesUrl = apiBaseUrl + '/search/movie?api_key=' + apiKey + '&query='
 var discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
 var upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
 var detailsUrl = apiBaseUrl + '/movie/' + currentID + '?api_key=' + apiKey;
-var tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + 30075 + '&api_key=' + tmsApiKey;
 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var numMonths = ['01','02','03','04','05','06','07','08','09','10','11','12'];
 var nowPlayingHTML = '';
@@ -557,26 +555,24 @@ function updateModal(thisMovie){
 		var genre = '';
 		var genreArray = [];
 		var currentRootId = '';
-		var currentTmsId = '';
 		var mpaaRating = currentMpaa;
 		// Grabbed MPAA ratings from a country and cirtificates object in release_dates (appended to the URL).
-		const tmsUrl = tmsBaseUrl + '/movies/showings?startDate=' + apiDate + '&zip=' + zip + '&api_key=' + tmsApiKey;
 		$('#main-content').html('');
 	 	var releaseResults = detailsData.release_dates.results;
-        var mpaa = 'NR';
-        // There were results for multiple countries and regions, so there were more than just MPAA ratings...
-        for (let result of releaseResults) {
-            if (result.iso_3166_1 === "US") {
-                var certifications = result.release_dates;
-                for (let cert of certifications) {
-                    if (cert.certification !== '') {
-                        mpaa = cert.certification;
-                        break;
-                    }
-                }
-            }
-        }
-        // Grabbed all available genres.
+		var mpaa = 'NR';
+		// There were results for multiple countries and regions, so there were more than just MPAA ratings...
+		for (let result of releaseResults) {
+			if (result.iso_3166_1 === "US") {
+				var certifications = result.release_dates;
+				for (let cert of certifications) {
+					if (cert.certification !== '') {
+						mpaa = cert.certification;
+						break;
+					}
+				}
+			}
+		}
+		// Grabbed all available genres.
 		for(let i = 0; i < detailsData.genres.length; i++){
 			genre = detailsData.genres[i].name;
 			genreArray.push(genre);
@@ -668,15 +664,15 @@ function updateModal(thisMovie){
 			var favArray = [];
 			var old = localStorage.getItem('favorite');
 			// Setting base cases, and making sure it isn't null.
-		    if(old === null){
-		    	localStorage.setItem('favorite', currentID);
-		    	old = localStorage.getItem('favorite');
-		    	favArray.push(old);
-		    }else if(old === currentID){
-		    	localStorage.removeItem('favorite');
-		    }else{
-		    	favArray = old.split(',');
-		    	for(let i = 0; i < favArray.length; i++){
+			if(old === null){
+				localStorage.setItem('favorite', currentID);
+				old = localStorage.getItem('favorite');
+				favArray.push(old);
+			}else if(old === currentID){
+				localStorage.removeItem('favorite');
+			}else{
+				favArray = old.split(',');
+				for(let i = 0; i < favArray.length; i++){
 					if(favArray[i] == currentID){
 						removeFromStorage('favorite', currentID);
 						break;
@@ -685,23 +681,23 @@ function updateModal(thisMovie){
 						break;
 					}
 				}
-		    }
-		    ///////////////////////
-		    // Helper functions to append or remove the item.
-		    ///////////////////////
+			}
+			///////////////////////
+			// Helper functions to append or remove the item.
+			///////////////////////
 			function appendToStorage(name, data){ 
-			    localStorage.setItem(name, old + ',' + data);
+				localStorage.setItem(name, old + ',' + data);
 			}
 			function removeFromStorage(name, data){
-			    for(let i = 0; i < favArray.length; i++){
-			    	if(favArray[i] == currentID){
-			    		favArray.splice(i,1);
-			    	}
-			    }
-			    var favString = favArray.join();
-			    localStorage.setItem('favorite', favString);
-			    if(currentQuery === 'favorites'){
-				    favoritesHTML = '';
+				for(let i = 0; i < favArray.length; i++){
+					if(favArray[i] == currentID){
+						favArray.splice(i,1);
+					}
+				}
+				var favString = favArray.join();
+				localStorage.setItem('favorite', favString);
+				if(currentQuery === 'favorites'){
+					favoritesHTML = '';
 					$('#movie-grid').html(favoritesHTML);
 					var favArr = favString.split(',');
 					for(let i=0; i<favArr.length; i++){
