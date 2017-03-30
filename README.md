@@ -203,7 +203,14 @@ And on each function to make an AJAX call, there is another conditional to deal 
 
 ## Screen Shots
 Holy Screen Shots Batman!
-(coming soon)
+
+![Now Playing](https://github.com/AndyTuttle12/movie-app/blob/master/screenshots/nowplaying.png)
+![Browsing](https://github.com/AndyTuttle12/movie-app/blob/master/screenshots/browsing.png)
+![Search Bar](https://github.com/AndyTuttle12/movie-app/blob/master/screenshots/searchbar.png)
+![Menu](https://github.com/AndyTuttle12/movie-app/blob/master/screenshots/menubar.png)
+![Matrix Search](https://github.com/AndyTuttle12/movie-app/blob/master/screenshots/matrixsearch.png)
+![Details](https://github.com/AndyTuttle12/movie-app/blob/master/screenshots/details.png)
+![Favorites](https://github.com/AndyTuttle12/movie-app/blob/master/screenshots/favorites.png)
 
 ---
 
