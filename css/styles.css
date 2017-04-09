@@ -500,7 +500,7 @@ div.search-area{
 /* Title and basic info styles */
 .modal-movie-title{
 	color: #fff;
-	margin: 200px 20px 60px 100px;
+	margin: 100px 20px 20px 100px;
 }
 
 .modal-movie-title #title-text{
@@ -532,6 +532,14 @@ div.search-area{
 
 .modal-movie-title #release-date{
 	font-size: 16px;
+}
+
+#desc{
+	box-sizing: border-box;
+	max-height: 250px;
+	padding: 5px;
+	overflow-y: scroll;
+	-webkit-scrollbar: hidden;
 }
 
 /* More Details Styles */
@@ -574,7 +582,7 @@ div.search-area{
 /* Ratings and Favorites Styles */
 #movie-rating{
 	float: right;
-	margin-right: 20px;
+	margin-right: 110px;
 	font-size: 18px;
 }
 

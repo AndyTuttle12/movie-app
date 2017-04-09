@@ -83,6 +83,8 @@ $(document).ready(function(){
 	$('.playing').click(function(){
 		$('.main-menu a p').removeClass('active-browse');
 		$('.playing p').addClass('active-browse');
+		$('.main-menu').removeClass('active');
+		$('.main-menu-tab').removeClass('active');
 		currentPage = 1;
 		nowPlayingUrl = apiBaseUrl + '/movie/now_playing?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
 		getNowPlaying();
@@ -159,7 +161,7 @@ $(document).ready(function(){
 						searchHTML += '<div class="movie-title">';
 							searchHTML += '<h2>' + title + '</h2>';
 							// The date is just some custom JS Date Object manipulation.
-							searchHTML += '<h4>Released: ' + month + ' ' + day + ', ' + year + '<h4>';
+							searchHTML += '<h4>Release Date: ' + month + ' ' + day + ', ' + year + '<h4>';
 						searchHTML += '</div>';
 						searchHTML += '<div id="details" class="details text-center">';
 							// A bit of conditional rendering for the heart icon for favorites.
@@ -227,7 +229,7 @@ $(document).ready(function(){
 					nowPlayingHTML += '<div class="overlay">';
 						nowPlayingHTML += '<div class="movie-title">';
 							nowPlayingHTML += '<h2>' + title + '</h2>';
-							nowPlayingHTML += '<h4>Released: ' + month + ' ' + day + ', ' + year + '<h4>';
+							nowPlayingHTML += '<h4>Release Date: ' + month + ' ' + day + ', ' + year + '<h4>';
 						nowPlayingHTML += '</div>';
 						nowPlayingHTML += '<div id="details" class="details text-center">';
 							for(let j = 0; j < savedArray.length; j++){
@@ -259,6 +261,8 @@ $(document).ready(function(){
 		currentPage = 1;
 		$('.main-menu a p').removeClass('active-browse');
 		$('.upcoming p').addClass('active-browse');
+		$('.main-menu').removeClass('active');
+		$('.main-menu-tab').removeClass('active');
 		upcomingBaseUrl = apiBaseUrl + '/movie/upcoming?api_key=' + apiKey + '&region=US' + '&page=' + currentPage;
 		getUpcoming();
 	});
@@ -357,6 +361,8 @@ $(document).ready(function(){
 		var linkVar = $(this).attr('lval');
 		$('.main-menu a p').removeClass('active-browse');
 		$('#'+currentFilter+' p').addClass('active-browse');
+		$('.main-menu').removeClass('active');
+		$('.main-menu-tab').removeClass('active');
 		currentPage = 1;
 		discoverBaseUrl = apiBaseUrl + '/discover/movie?api_key=' + apiKey + '&page=' + currentPage;
 		discoverJSON(linkVar,sortVar);
