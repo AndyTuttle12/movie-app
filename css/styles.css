@@ -689,9 +689,26 @@ div.search-area{
 	.App{
 		width: 100vw;
 		height: 100vh;
+		font-size: 3em;
 	}
 	.movie-item{
 		float: right;
+	}
+	.main-menu{
+		font-size: 2em;
+		width: 50%;
+	}
+	.main-menu-tab{
+		width: 10%;
+		height: 24%;
+		font-size: 50px;
+		padding: 50px 0 35px;
+		word-spacing: 0;
+		letter-spacing: -2px;
+	}
+	.active{
+		display: block;
+		transform: translateX(290px);
 	}
 }
 
@@ -700,6 +717,23 @@ div.search-area{
 	.App{
 		width: 80vw;
 		height: 100vh;
+		font-size: 3em;
+	}
+	.main-menu{
+		font-size: 2em;
+		width: 30%;
+	}
+	.main-menu-tab{
+		width: 50px;
+		height: 120px;
+		font-size: 60px;
+		padding: 50px 0 35px;
+		word-spacing: 0;
+		letter-spacing: -2px;
+	}
+	.main-menu-tab.active{
+		display: block;
+		transform: translateX(290px);
 	}
 }
 
@@ -708,6 +742,10 @@ div.search-area{
 	.App{
 		width: 70vw;
 		height: 100vh;
+	}
+	.main-menu-tab{
+		width: 25px;
+		height: 60px;
 	}
 }
 
