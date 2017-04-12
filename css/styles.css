@@ -693,6 +693,8 @@ div.search-area{
 	}
 	.movie-item{
 		float: right;
+		width: 49.5%;
+		min-width: 300px;
 	}
 	.main-menu{
 		font-size: 2em;
@@ -718,6 +720,10 @@ div.search-area{
 		width: 80vw;
 		height: 100vh;
 		font-size: 3em;
+	}
+	.movie-item{
+		width: 33.1%;
+		min-width: 300px;
 	}
 	.main-menu{
 		font-size: 2em;
