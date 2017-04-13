@@ -299,7 +299,7 @@ div.search-area{
 
 .movie-item{
 	padding: 0;
-	width: auto;
+	/* width: auto; */
 	height: auto;
 	min-height: 450px;
 	margin: 2px 2px 2px 0px;
@@ -722,6 +722,7 @@ div.search-area{
 		font-size: 3em;
 	}
 	.movie-item{
+		float: right;
 		width: 33.1%;
 		min-width: 300px;
 	}
@@ -752,6 +753,11 @@ div.search-area{
 	.main-menu-tab{
 		width: 25px;
 		height: 60px;
+	}
+	.movie-item{
+		float: right;
+		width: 300px;
+		
 	}
 }
 
